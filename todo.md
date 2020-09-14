@@ -2,11 +2,11 @@
 
 * 完成输入设置√
 
-* 完成界面渲染
+* 完成界面渲染√
 
-* 搜索框的加锁小图标或者钥匙
+* 搜索框的加锁小图标或者钥匙√
 
-* 完成输入内容的检查
+* 完成输入内容的检查√
 
 ```
     QString qstr = ui->textEdit->toPlainText();
@@ -18,7 +18,7 @@
         return;
     }
 ```
-* encrypt进度条实现
+* encrypt进度条实现√
 
 ```
     encrypt = false;
@@ -26,4 +26,4 @@
     QString notice = "calculating...";
     ui->label_26->setText(notice);
 ```
-* 输入接口的实现
+* 输入接口的实现√

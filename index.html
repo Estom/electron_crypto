@@ -42,7 +42,9 @@
                     <!-- ============================================================== -->
                     <!-- end search bar  -->
                 </div>
-
+                <div class="text-center invisible collapse" id="progress">
+                    <p class="dashboard-spinner spinner-danger spinner-md"></p>
+                </div>
             </div>
         </div>
     </div>
@@ -124,11 +126,11 @@
                             </tr>
                             <tr class="table-secondary">
                                 <th scope="row">Time-per-ms</th>
-                                <td><%:=part1.process_time%></td>
+                                <td><%:=(part1.process_time).toFixed(4)%></td>
                             </tr>
                             <tr class="table-warning">
                                 <th scope="row">Bytes-per-s</th>
-                                <td><%:=part1.per_process_time%></td>
+                                <td><%:=(part1.per_process_time).toFixed(4)%></td>
                             </tr>
                         </tbody>
                     </table>
@@ -164,11 +166,11 @@
                             </tr>
                             <tr class="table-secondary">
                                 <th scope="row">Time-per-ms</th>
-                                <td><%:=part2.process_time%></td>
+                                <td><%:=(part2.process_time).toFixed(4)%></td>
                             </tr>
                             <tr class="table-warning">
                                 <th scope="row">Bytes-per-s</th>
-                                <td><%:=part2.per_process_time%></td>
+                                <td><%:=(part2.per_process_time).toFixed(4)%></td>
                             </tr>
                         </tbody>
                     </table>
@@ -204,11 +206,11 @@
                             </tr>
                             <tr class="table-secondary">
                                 <th scope="row">Time-per-ms</th>
-                                <td><%:=part3.process_time%></td>
+                                <td><%:=(part3.process_time).toFixed(4)%></td>
                             </tr>
                             <tr class="table-warning">
                                 <th scope="row">Bytes-per-s</th>
-                                <td><%:=part3.per_process_time%></td>
+                                <td><%:=(part3.per_process_time).toFixed(4)%></td>
                             </tr>
                         </tbody>
                     </table>
@@ -218,20 +220,45 @@
     </div>
 </script>
 
+<script id="tpl2" type="text/template">
+    <div class="row">
+        <span class="dashboard-spinner spinner-primary spinner-xxl"></span>
+    </div>
+</script>
 <script type="text/javascript">
-    const sm2 = require('./build/Release/sm2');
-    const template = require('template_js')
+
     document.getElementById("render").onclick = function render() {
-        var message = document.getElementById("input").value;
-        //   alert(message)
-        var test = sm2.test(message);
-        var tpl = document.getElementById('tpl').innerHTML;
-        var html = template(tpl, test);
-        //   alert(html);
-        div = document.createElement("div");
-        div.innerHTML = html;
-        alert(div);
-        document.getElementById("content_end").appendChild(div);
+        //添加进度条。因为渲染程序会卡住会阻止界面动画。最好的办法是变成异步请求，显示进度条。
+        document.getElementById("progress").setAttribute("class", "text-center show collapse");
+
+        // 异步执行获取数据，因为js引擎会优先处理js事件，然后对页面进行渲染，如果使用获取数据堵塞js进程，页面不会立即渲染。
+        setTimeout(() => {
+            //获取nodejs辅助函数库
+            const sm2 = require('./build/Release/sm2');
+            const template = require('template_js');
+
+            //对message信息进行过滤
+            var message = document.getElementById("input").value;
+            if(message.length<=0 || message.length>255){
+                alert("length of message 0~255");
+                document.getElementById("progress").setAttribute("class", "text-center invisible collapse");
+                return ;
+            }
+
+            //获取数据并渲染数据
+            var test = sm2.test(message);
+            var tpl = document.getElementById('tpl').innerHTML;
+            var html = template(tpl, test);
+
+            //创建新的div并添加到最后边
+            var div = document.createElement("div");
+            div.innerHTML = html;
+            document.getElementById("content_end").appendChild(div);
+            //删除进度条
+            document.getElementById("progress").setAttribute("class", "text-center invisible collapse");
+        },100)
+
+
     }
 </script>
 

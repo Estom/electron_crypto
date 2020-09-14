@@ -4,9 +4,12 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "install": "cmake-js compile"
+    "addon_test": "node addon_test.js",
+    "test": "electron . --inspect",
+    "start": "electron . ",
+    "install": "cmake-js compile",
+    "build": "cmake-js rebuild",
+    "package": "electron-packager ./  electron-crypto --platform=linux --arch=x64 --out=./app --electron-version=10.1.1"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +22,9 @@
     "runtime": "node",
     "runtimeVersion": "12.18.3",
     "arch": "x64"
+  },
+  "devDependencies": {
+    "electron": "^10.1.1",
+    "electron-packager": "^15.1.0"
   }
 }
