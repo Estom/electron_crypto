@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <script type="text/javascript" src="js/jquery-3.5.1.min.js"></script>
+  <!-- <script src="node_modules/template_js/dist/index.aio.js"></script> -->
+
+
+</head>
+
+<body>
+  <h1>Hello World!</h1>
+  <button onclick="render()">click</button>
+  <input type="text" id="input">
+  <div id="content"></div>
+
+</body>
+
+
+
+<script id="tpl" type="text/template">
+  <ul>
+    <li><%:=part0.msg_len%></li>
+    <li><%:=part0.encryp_msg_len%></li>
+    <li><%:=part0.encryp_mes_len_rs%></li>
+    <li><%:=part0.encryp_msg%></li>
+ </ul>
+  <ul>
+     <li><%:=part1.times%></li>
+     <li><%:=part1.dur%></li>
+     <li><%:=part1.total_bytes%></li>
+     <li><%:=part1.process_time%></li>
+     <li><%:=part1.per_process_time%></li>
+  </ul>
+  <ul>
+    <li><%:=part2.times%></li>
+    <li><%:=part2.dur%></li>
+    <li><%:=part2.total_bytes%></li>
+    <li><%:=part2.process_time%></li>
+    <li><%:=part2.per_process_time%></li>
+ </ul>
+ <ul>
+  <li><%:=part3.times%></li>
+  <li><%:=part3.dur%></li>
+  <li><%:=part3.total_bytes%></li>
+  <li><%:=part3.process_time%></li>
+  <li><%:=part3.per_process_time%></li>
+  </ul>
+</script>
+
+<script type="text/javascript">
+  const sm2 = require('./build/Release/sm2');
+  const template = require('template_js')
+  function render() {
+    var message = document.getElementById("input").value;
+    var test = sm2.test(message);
+    var tpl = document.getElementById('tpl').innerHTML;
+    var html = template(tpl, test);
+    document.getElementById("content").innerHTML = html;
+  }
+</script>
+
+
+</html>

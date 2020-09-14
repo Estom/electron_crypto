@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/libs/css/style.css">
+    <link rel="stylesheet" href="assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="assets/vendor/charts/chartist-bundle/chartist.css">
+    <link rel="stylesheet" href="assets/vendor/charts/morris-bundle/morris.css">
+    <link rel="stylesheet" href="assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="assets/vendor/charts/c3charts/c3.css">
+    <link rel="stylesheet" href="assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <title>Encrypt With SM2</title>
+</head>
+
+<body class=" bg-dark">
+    <!-- ============================================================== -->
+    <div class="dashboard-main-wrapper ">
+        <!-- wrapper  -->
+        <!-- ============================================================== -->
+        <div class="influence-finder">
+            <div class="container-fluid dashboard-content " id="content_end">
+                <div class="row">
+                    <!-- ============================================================== -->
+                    <!-- search bar  -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <input class="form-control form-control-lg" type="search"
+                                    placeholder="Message To Be Encrypted" aria-label="Search" id="input">
+                                <button class="btn btn-primary search-btn" type="submit" id="render">Encrypt</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end search bar  -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Optional JavaScript -->
+    <!-- jquery 3.3.1 -->
+    <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <!-- bootstap bundle js -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <!-- slimscroll js -->
+    <script src="assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <!-- main js -->
+    <script src="assets/libs/js/main-js.js"></script>
+    <!-- chart chartist js -->
+    <script src="assets/vendor/charts/chartist-bundle/chartist.min.js"></script>
+    <!-- sparkline js -->
+    <script src="assets/vendor/charts/sparkline/jquery.sparkline.js"></script>
+    <!-- morris js -->
+    <script src="assets/vendor/charts/morris-bundle/raphael.min.js"></script>
+    <script src="assets/vendor/charts/morris-bundle/morris.js"></script>
+    <!-- chart c3 js -->
+    <script src="assets/vendor/charts/c3charts/c3.min.js"></script>
+    <script src="assets/vendor/charts/c3charts/d3-5.4.0.min.js"></script>
+    <script src="assets/vendor/charts/c3charts/C3chartjs.js"></script>
+    <script src="assets/libs/js/dashboard-ecommerce.js"></script>
+</body>
+
+
+<script id="tpl" type="text/template">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <div class="card-header">
+                    Encrypted Message
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><%:=part0.encryp_msg%></p>
+                </div>
+                <div class="card-footer d-flex text-muted">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+                        Message Length:<%:=part0.msg_len%>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+                        Encrypted Message Length:<%:=part0.encryp_msg_len%>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+                        Encrypted R and S Length:<%:=part0.encryp_mes_len_rs%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <div class="card">
+                <h4 class="card-header">Enc-sig and Ver-dec</h4>
+                <div class="card-body">
+                    <table class="table">
+                        <!-- <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First</th>
+                                <th scope="col">Last</th>
+                                <th scope="col">Handle</th>
+                            </tr>
+                        </thead> -->
+                        <tbody>
+                            <tr class="table-primary">
+                                <th scope="row">Time</th>
+                                <td><%:=part1.times%></td>
+                            </tr>
+                            <tr class="table-info">
+                                <th scope="row">Duration</th>
+                                <td><%:=part1.dur%></td>
+                            </tr>
+                            <tr class="table-success">
+                                <th scope="row">Bytes</th>
+                                <td><%:=part1.total_bytes%></td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <th scope="row">Time-per-ms</th>
+                                <td><%:=part1.process_time%></td>
+                            </tr>
+                            <tr class="table-warning">
+                                <th scope="row">Bytes-per-s</th>
+                                <td><%:=part1.per_process_time%></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <div class="card">
+                <h4 class="card-header">Enc-sig</h4>
+                <div class="card-body">
+                    <table class="table">
+                        <!-- <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First</th>
+                                <th scope="col">Last</th>
+                                <th scope="col">Handle</th>
+                            </tr>
+                        </thead> -->
+                        <tbody>
+                            <tr class="table-primary">
+                                <th scope="row">Time</th>
+                                <td><%:=part2.times%></td>
+                            </tr>
+                            <tr class="table-info">
+                                <th scope="row">Duraiton</th>
+                                <td><%:=part2.dur%></td>
+                            </tr>
+                            <tr class="table-success">
+                                <th scope="row">Bytes</th>
+                                <td><%:=part2.total_bytes%></td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <th scope="row">Time-per-ms</th>
+                                <td><%:=part2.process_time%></td>
+                            </tr>
+                            <tr class="table-warning">
+                                <th scope="row">Bytes-per-s</th>
+                                <td><%:=part2.per_process_time%></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+            <div class="card">
+                <h4 class="card-header">Ver-dic</h4>
+                <div class="card-body">
+                    <table class="table">
+                        <!-- <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First</th>
+                                <th scope="col">Last</th>
+                                <th scope="col">Handle</th>
+                            </tr>
+                        </thead> -->
+                        <tbody>
+                            <tr class="table-primary">
+                                <th scope="row">Time</th>
+                                <td><%:=part3.times%></td>
+                            </tr>
+                            <tr class="table-info">
+                                <th scope="row">Duration</th>
+                                <td><%:=part3.dur%></td>
+                            </tr>
+                            <tr class="table-success">
+                                <th scope="row">Bytes</th>
+                                <td><%:=part3.total_bytes%></td>
+                            </tr>
+                            <tr class="table-secondary">
+                                <th scope="row">Time-per-ms</th>
+                                <td><%:=part3.process_time%></td>
+                            </tr>
+                            <tr class="table-warning">
+                                <th scope="row">Bytes-per-s</th>
+                                <td><%:=part3.per_process_time%></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/javascript">
+    const sm2 = require('./build/Release/sm2');
+    const template = require('template_js')
+    document.getElementById("render").onclick = function render() {
+        var message = document.getElementById("input").value;
+        //   alert(message)
+        var test = sm2.test(message);
+        var tpl = document.getElementById('tpl').innerHTML;
+        var html = template(tpl, test);
+        //   alert(html);
+        div = document.createElement("div");
+        div.innerHTML = html;
+        alert(div);
+        document.getElementById("content_end").appendChild(div);
+    }
+</script>
+
+</html>
