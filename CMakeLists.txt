@@ -25,7 +25,8 @@ add_library(sm2lib SHARED ${DIRSRCS})
 
 
 # 定义了动态链接库的生成
-file(GLOB SOURCE_FILES "SM2/src/sm2_node.cpp")
+# file(GLOB SOURCE_FILES "SM2/src/sm2_node.cpp")
+file(GLOB SOURCE_FILES "SM2/src/main_node.cpp")
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 

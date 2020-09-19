@@ -250,24 +250,24 @@ napi_value test_method(napi_env env, const napi_callback_info info){
   return result;
 }
 
-napi_value init(napi_env env, napi_value exports) {
-  napi_status status;
-  // napi_value new_exports;
-  napi_value fn_test_method;
-  napi_value fn_hello_method;
+// napi_value init(napi_env env, napi_value exports) {
+//   napi_status status;
+//   // napi_value new_exports;
+//   napi_value fn_test_method;
+//   napi_value fn_hello_method;
 
-  //创建了一个NAPI方法，然后直接返回这个方法。那么这个模块本身也就对应这个方法
-  status = napi_create_function(env, nullptr, NAPI_AUTO_LENGTH, test_method, nullptr, &fn_test_method);
-  assert(status == napi_ok);
-  status = napi_set_named_property(env,exports, "test", fn_test_method);
-  assert(status == napi_ok);
+//   //创建了一个NAPI方法，然后直接返回这个方法。那么这个模块本身也就对应这个方法
+//   status = napi_create_function(env, nullptr, NAPI_AUTO_LENGTH, test_method, nullptr, &fn_test_method);
+//   assert(status == napi_ok);
+//   status = napi_set_named_property(env,exports, "test", fn_test_method);
+//   assert(status == napi_ok);
 
-  //在exports暴露的接口中，绑定其他的方法。模块的hello属性，是一个方法。
-  status = napi_create_function(env, nullptr, NAPI_AUTO_LENGTH, hello_method, nullptr, &fn_hello_method);
-  assert(status == napi_ok);
-  status = napi_set_named_property(env, exports, "hello", fn_hello_method);
-  assert(status == napi_ok);
-  return exports;
-}
+//   //在exports暴露的接口中，绑定其他的方法。模块的hello属性，是一个方法。
+//   status = napi_create_function(env, nullptr, NAPI_AUTO_LENGTH, hello_method, nullptr, &fn_hello_method);
+//   assert(status == napi_ok);
+//   status = napi_set_named_property(env, exports, "hello", fn_hello_method);
+//   assert(status == napi_ok);
+//   return exports;
+// }
 
-NAPI_MODULE(NODE_GYP_MODULE_NAME, init)
+// NAPI_MODULE(NODE_GYP_MODULE_NAME, init)
