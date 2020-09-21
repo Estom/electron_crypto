@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendor/charts/c3charts/c3.css">
     <link rel="stylesheet" href="assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+
     <title>Encrypt With SM2</title>
 </head>
 
@@ -25,17 +26,118 @@
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="influence-finder">
-            <div class="container-fluid dashboard-content " id="content_end">
+            <div class="container-fluid dashboard-content ">
                 <div class="row">
                     <!-- ============================================================== -->
                     <!-- search bar  -->
                     <!-- ============================================================== -->
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
                         <div class="card">
+                            <div class="card-header bg-primary text-center p-3 ">
+                                <h4 class="mb-1 text-white">Encrypt Sender</h4>
+                            </div>
                             <div class="card-body">
-                                <input class="form-control form-control-lg" type="search"
-                                    placeholder="Message To Be Encrypted" aria-label="Search" id="input">
-                                <button class="btn btn-primary search-btn" type="submit" id="render">Encrypt</button>
+                                <div class="input-group mb-0">
+                                    <input type="text" class="form-control" id="message">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-primary" id="encrypt">Encrypt</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body text-center">
+                                <h3 class="mb-0">Encrypted Message</h2>
+                                <p id="sign_message"></p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">是否成功(ms)<span id="sign_flag"></span></li>
+                                <li class="list-group-item">签密时间(ms)<span id="sign_time"></span></li>
+
+                                <li class="list-group-item">发送者ID：<span>用户A</span></li>
+                                <li class="list-group-item">接收者ID：<span>用户B</span></li>
+
+                            </ul>
+
+                            <div class="card-footer d-flex text-muted">
+                                <button class="btn btn-space btn-secondary mb-2" id="send">发送</button>
+                                <!-- <button class="btn btn-space btn-secondary mb-2">Cancel</button> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-center p-3 ">
+                                <h4 class="mb-0 text-white"> Decrypt Receiver</h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <h3 class="mb-0">Received Message</h1>
+                                <p id="receive_message"></p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">输出明文：<span id="unsign_message"></span></li>
+                                <li class="list-group-item">是否解签密：<span id="unsign_is_unsign"></span></li>
+
+                                <li class="list-group-item">是否被篡改：<span id="unsign_is_tamper"></span></li>
+                                <li class="list-group-item">是否被重放：<span id="unsign_is_replay"></span></li>
+                                <li class="list-group-item">签密时间(ms)：<span id="unsign_time"></span></li>
+                                <li class="list-group-item">时间戳：<span id="unsign_timestamp"></span></li>
+
+                                <li class="list-group-item">发送者ID：<span>用户A</span></li>
+                                <li class="list-group-item">接收者ID：<span>用户B</span></li>
+                            </ul>
+           
+                            <div class="card-footer d-flex text-muted">
+                                <button class="btn btn-space btn-secondary mb-2" id="receive">接收</button>
+                                <button class="btn btn-space btn-secondary mb-2" id="unsign">解密</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end search bar  -->
+                </div>
+                <div class="row">
+                    <!-- ============================================================== -->
+                    <!-- search bar  -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-center p-3 ">
+                                <h4 class="mb-0 text-white">Tamper Attacker</h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <h3 class="mb-0">Intercept Message</h1>
+                                <p id="intercept_message1"></p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" >篡改后的密文：<span id="tamper_message">asdf</span></li>
+                                <li class="list-group-item">发送者ID：<span>用户A</span></li>
+                                <li class="list-group-item">接收者ID：<span>用户B</span></li>
+
+                            </ul>
+       
+                            <div class="card-footer d-flex text-muted">
+                                <button class="btn btn-space btn-secondary mb-2" id="intercept1">截获</button>
+                                <button class="btn btn-space btn-secondary mb-2" id="send1">篡改发送</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-center p-3 ">
+                                <h4 class="mb-0 text-white">Replay Attacker</h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <h3 class="mb-1">Intercept Message</h1>
+                                <p id="intercept_message2"></p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item" >重放信息：<span id="replay_message"></span></li>
+                                <li class="list-group-item">发送者ID：<span>用户A</span></li>
+                                <li class="list-group-item">接收者ID：<span>用户B</span></li>
+                            </ul>
+             
+                            <div class="card-footer d-flex text-muted">
+                                <button class="btn btn-space btn-secondary mb-2" id="intercept2">截获</button>
+                                <button class="btn btn-space btn-secondary mb-2" id="send2">重放发送</button>
                             </div>
                         </div>
                     </div>
@@ -70,196 +172,8 @@
     <script src="assets/vendor/charts/c3charts/d3-5.4.0.min.js"></script>
     <script src="assets/vendor/charts/c3charts/C3chartjs.js"></script>
     <script src="assets/libs/js/dashboard-ecommerce.js"></script>
+
+    <script type="text/javascript" src="index.js"></script>
+
 </body>
-
-
-<script id="tpl" type="text/template">
-    <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-            <div class="card">
-                <div class="card-header">
-                    Encrypted Message
-                </div>
-                <div class="card-body">
-                    <p class="card-text"><%:=part0.encryp_msg%></p>
-                </div>
-                <div class="card-footer d-flex text-muted">
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
-                        Message Length:<%:=part0.msg_len%>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
-                        Encrypted Message Length:<%:=part0.encryp_msg_len%>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
-                        Encrypted R and S Length:<%:=part0.encryp_mes_len_rs%>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-            <div class="card">
-                <h4 class="card-header">Enc-sig and Ver-dec</h4>
-                <div class="card-body">
-                    <table class="table">
-                        <!-- <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                            </tr>
-                        </thead> -->
-                        <tbody>
-                            <tr class="table-primary">
-                                <th scope="row">Time</th>
-                                <td><%:=part1.times%></td>
-                            </tr>
-                            <tr class="table-info">
-                                <th scope="row">Duration</th>
-                                <td><%:=part1.dur%></td>
-                            </tr>
-                            <tr class="table-success">
-                                <th scope="row">Bytes</th>
-                                <td><%:=part1.total_bytes%></td>
-                            </tr>
-                            <tr class="table-secondary">
-                                <th scope="row">Time-per-ms</th>
-                                <td><%:=(part1.process_time).toFixed(4)%></td>
-                            </tr>
-                            <tr class="table-warning">
-                                <th scope="row">Bytes-per-s</th>
-                                <td><%:=(part1.per_process_time).toFixed(4)%></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-            <div class="card">
-                <h4 class="card-header">Enc-sig</h4>
-                <div class="card-body">
-                    <table class="table">
-                        <!-- <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                            </tr>
-                        </thead> -->
-                        <tbody>
-                            <tr class="table-primary">
-                                <th scope="row">Time</th>
-                                <td><%:=part2.times%></td>
-                            </tr>
-                            <tr class="table-info">
-                                <th scope="row">Duraiton</th>
-                                <td><%:=part2.dur%></td>
-                            </tr>
-                            <tr class="table-success">
-                                <th scope="row">Bytes</th>
-                                <td><%:=part2.total_bytes%></td>
-                            </tr>
-                            <tr class="table-secondary">
-                                <th scope="row">Time-per-ms</th>
-                                <td><%:=(part2.process_time).toFixed(4)%></td>
-                            </tr>
-                            <tr class="table-warning">
-                                <th scope="row">Bytes-per-s</th>
-                                <td><%:=(part2.per_process_time).toFixed(4)%></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-            <div class="card">
-                <h4 class="card-header">Ver-dic</h4>
-                <div class="card-body">
-                    <table class="table">
-                        <!-- <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                            </tr>
-                        </thead> -->
-                        <tbody>
-                            <tr class="table-primary">
-                                <th scope="row">Time</th>
-                                <td><%:=part3.times%></td>
-                            </tr>
-                            <tr class="table-info">
-                                <th scope="row">Duration</th>
-                                <td><%:=part3.dur%></td>
-                            </tr>
-                            <tr class="table-success">
-                                <th scope="row">Bytes</th>
-                                <td><%:=part3.total_bytes%></td>
-                            </tr>
-                            <tr class="table-secondary">
-                                <th scope="row">Time-per-ms</th>
-                                <td><%:=(part3.process_time).toFixed(4)%></td>
-                            </tr>
-                            <tr class="table-warning">
-                                <th scope="row">Bytes-per-s</th>
-                                <td><%:=(part3.per_process_time).toFixed(4)%></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</script>
-
-<script id="tpl2" type="text/template">
-    <div class="row">
-        <span class="dashboard-spinner spinner-primary spinner-xxl"></span>
-    </div>
-</script>
-<script type="text/javascript">
-
-    document.getElementById("render").onclick = function render() {
-        //添加进度条。因为渲染程序会卡住会阻止界面动画。最好的办法是变成异步请求，显示进度条。
-        document.getElementById("progress").setAttribute("class", "text-center show collapse");
-
-        // 异步执行获取数据，因为js引擎会优先处理js事件，然后对页面进行渲染，如果使用获取数据堵塞js进程，页面不会立即渲染。
-        setTimeout(() => {
-            //获取nodejs辅助函数库
-            const sm2 = require('./build/Release/sm2');
-            const template = require('template_js');
-
-            //对message信息进行过滤
-            var message = document.getElementById("input").value;
-            if(message.length<=0 || message.length>255){
-                alert("length of message 0~255");
-                document.getElementById("progress").setAttribute("class", "text-center invisible collapse");
-                return ;
-            }
-
-            //获取数据并渲染数据
-            var test = sm2.test(message);
-            var tpl = document.getElementById('tpl').innerHTML;
-            var html = template(tpl, test);
-
-            //创建新的div并添加到最后边
-            var div = document.createElement("div");
-            div.innerHTML = html;
-            document.getElementById("content_end").appendChild(div);
-            //删除进度条
-            document.getElementById("progress").setAttribute("class", "text-center invisible collapse");
-        },100)
-
-
-    }
-</script>
-
 </html>
