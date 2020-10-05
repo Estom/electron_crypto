@@ -12,6 +12,10 @@ var unsgin_message=""
 
 sm2 = require('./build/Release/sm2');
 
+document.getElementById("pub_a").onclick=function(){
+    return;
+}
+
 document.getElementById("encrypt").onclick=function (){
 
     message = document.getElementById("message").value;

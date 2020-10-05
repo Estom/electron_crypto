@@ -20,7 +20,8 @@
     <title>基于SM2的解签密密码系统</title>
 </head>
 
-<body class=" bg-dark">
+<body class="bg-dark" background="./assets/background/3.jpg"
+    style="background-repeat: no-repeat;background-size: 100%;background-attachment: fixed;">
     <!-- ============================================================== -->
     <div class="dashboard-main-wrapper ">
         <h1 class="text-white text-center">基于SM2的解签密密码系统</h1>
@@ -28,111 +29,172 @@
         <!-- ============================================================== -->
         <div class="influence-finder">
             <div class="container-fluid dashboard-content ">
-                <div class="row">
+                <div class="card-deck m-3 p-3">
                     <!-- ============================================================== -->
                     <!-- search bar  -->
                     <!-- ============================================================== -->
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="card">
-                            <div class="card-header bg-primary text-center p-3 ">
-                                <h4 class="mb-1 text-white">发送者</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="input-group mb-0">
-                                    <input type="text" class="form-control" id="message">
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-primary" id="encrypt">签密</button>
+                    <div class="card" style="opacity: 1;">
+                        <div class="card-header bg-dark text-center p-3 ">
+                            <h4 class="mb-1 text-white">发送者</h4>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="exampleFormControlTextarea1"
+                                                class="d-flex justify-content-center">私钥</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                                placeholder="128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="exampleFormControlTextarea1"
+                                                class="d-flex justify-content-center">公钥</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                                disabled></textarea>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- <div class="card-body text-center">
-                                <h3 class="mb-0">发送的密文</h2>
-                                <p id="sign_message"></p>
-                            </div> -->
-                            <!-- <ul class="list-group list-group-flush">
-                                <li class="list-group-item">是否成功(ms)<span id="sign_flag"></span></li>
-                                <li class="list-group-item">签密时间(ms)<span id="sign_time"></span></li>
+                            </form>
 
-                                <li class="list-group-item">发送者ID：<span>用户A</span></li>
-                                <li class="list-group-item">接收者ID：<span>用户B</span></li>
+                            <form>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="message" class="d-flex justify-content-center">明文</label>
+                                            <textarea class="form-control" id="message" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="sign_message" class="d-flex justify-content-center">密文</label>
+                                            <textarea class="form-control" id="sign_message" rows="3"
+                                                disabled></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
 
-                            </ul> -->
+                        <div class="card-body px-5 mx-5">
                             <table class="table table-hover">
                                 <tbody>
                                     <tr>
-                                        <th scope="row">发送的密文</th>
-                                        <td><span id="sign_message"></span></td>
-                                    </tr>
-                                    <tr>
                                         <th scope="row">是否成功</th>
-                                        <td><span id="sign_flag"></span></td>
+                                        <td class="text-left">
+                                            <div class="switch-button switch-button-success">
+                                                <input type="checkbox" value=false name="switch16" id="sign_flag"><span>
+                                                    <label for="sign_flag"></label></span>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">签密时间（ms）</th>
-                                        <td><span id="sign_time"></span></td>
+                                        <td><span id="sign_time" class="badge badge-success"></span></td>
                                     </tr>
                                     <tr>
                                         <th scope="row">发送者ID</th>
-                                        <td><span>用户A</span></td>
+                                        <td class="text-left"><span>用户A</span></td>
                                     </tr>
                                     <tr>
                                         <th scope="row">接收者ID</th>
-                                        <td><span>用户B</span></td>
+                                        <td class="text-left"><span>用户B</span></td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="card-footer d-flex text-muted">
-                                <button class="btn btn-space btn-secondary mb-2" id="send">发送</button>
-                                <!-- <button class="btn btn-space btn-secondary mb-2">Cancel</button> -->
-                            </div>
+                        </div>
+                        <div class="card-footer d-flex text-muted justify-content-around">
+                            <button class="btn btn-space btn-dark mb-2" id="pub_a">秘钥</button>
+                            <button class="btn btn-space btn-dark mb-2" id="encrypt">签密</button>
+                            <button class="btn btn-space btn-dark mb-2" id="send">发送</button>
+
+                            <!-- <button class="btn btn-space btn-dark mb-2">Cancel</button> -->
                         </div>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="card">
-                            <div class="card-header bg-primary text-center p-3 ">
-                                <h4 class="mb-0 text-white">接收者</h4>
-                            </div>
-                            <!-- <div class="card-body text-center">
-                                <h3 class="mb-0">接收的密文</h1>
-                                <p id="receive_message"></p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">输出明文：<span id="unsign_message"></span></li>
-                                <li class="list-group-item">是否解签密：<span id="unsign_is_unsign"></span></li>
+                    <div class="card">
+                        <div class="card-header bg-dark text-center p-3 ">
+                            <h4 class="mb-0 text-white">接收者</h4>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="exampleFormControlTextarea1"
+                                                class="d-flex justify-content-center">私钥</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                                placeholder="128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="exampleFormControlTextarea1"
+                                                class="d-flex justify-content-center">公钥</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                                disabled></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
 
-                                <li class="list-group-item">是否被篡改：<span id="unsign_is_tamper"></span></li>
-                                <li class="list-group-item">是否被重放：<span id="unsign_is_replay"></span></li>
-                                <li class="list-group-item">签密时间(ms)：<span id="unsign_time"></span></li>
-                                <li class="list-group-item">时间戳：<span id="unsign_timestamp"></span></li>
-
-                                <li class="list-group-item">发送者ID：<span>用户A</span></li>
-                                <li class="list-group-item">接收者ID：<span>用户B</span></li>
-                            </ul> -->
+                            <form>
+                                <div class="form-row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="receive_message"
+                                                class="d-flex justify-content-center">密文</label>
+                                            <textarea class="form-control" id="receive_message" rows="3"
+                                                readonly></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="unsign_message" class="d-flex justify-content-center">明文</label>
+                                            <textarea class="form-control" id="unsign_message" rows="3"
+                                                readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-body px-5 mx-5">
                             <table class="table table-hover">
                                 <tbody>
                                     <tr>
-                                        <th scope="row">接收的密文</th>
-                                        <td><span id="receive_message"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">输出明文</th>
-                                        <td><span id="unsign_message"></span></td>
-                                    </tr>
-                                    <tr>
                                         <th scope="row">是否解签密</th>
-                                        <td><span id="unsign_is_unsign"></span></td>
+                                        <td>
+                                            <div class="switch-button switch-button-success">
+                                                <input type="checkbox" value=false name="switch16"
+                                                    id="unsign_is_unsign"><span>
+                                                    <label for="unsign_is_unsign"></label></span>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">是否被篡改</th>
-                                        <td><span id="unsign_is_tamper"></span></td>
+                                        <td>
+                                            <div class="switch-button switch-button-success">
+                                                <input type="checkbox" value=false name="switch16"
+                                                    id="unsign_is_tamper"><span>
+                                                    <label for="unsign_is_tamper"></label></span>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">是否被重放：</th>
-                                        <td><span id="unsign_is_replay"></span></td>
+                                        <td>
+                                            <div class="switch-button switch-button-success">
+                                                <input type="checkbox" value=false name="switch16"
+                                                    id="unsign_is_replay"><span>
+                                                    <label for="unsign_is_replay"></label></span>
+                                            </div>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">解密时间（ms）</th>
-                                        <td><span id="unsign_time"></span></td>
+                                        <td><span id="unsign_time" class="badge badge-success"></span></td>
                                     </tr>
                                     <tr>
                                         <th scope="row">时间戳</th>
@@ -148,101 +210,93 @@
                                     </tr>
                                 </tbody>
                             </table>
-
-                            <div class="card-footer d-flex text-muted">
-                                <button class="btn btn-space btn-secondary mb-2" id="receive">接收</button>
-                                <button class="btn btn-space btn-secondary mb-2" id="unsign">解密</button>
-                            </div>
+                        </div>
+                        <div class="card-footer d-flex text-muted justify-content-around">
+                            <button class="btn btn-space btn-dark mb-2" id="pub_b">秘钥</button>
+                            <button class="btn btn-space btn-dark mb-2" id="receive">接收</button>
+                            <button class="btn btn-space btn-dark mb-2" id="unsign">解密</button>
                         </div>
                     </div>
                     <!-- ============================================================== -->
                     <!-- end search bar  -->
                 </div>
-                <div class="row">
+                <div class="card-deck m-3 p-3">
                     <!-- ============================================================== -->
                     <!-- search bar  -->
                     <!-- ============================================================== -->
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="card">
-                            <div class="card-header bg-primary text-center p-3 ">
-                                <h4 class="mb-0 text-white">篡改攻击者</h4>
-                            </div>
-                            <!-- <div class="card-body text-center">
-                                <h3 class="mb-0">截获的密文</h1>
-                                <p id="intercept_message1"></p>
-                            </div> -->
-                            <!-- <ul class="list-group list-group-flush">
-                                <li class="list-group-item" >篡改后的密文：<span id="tamper_message">asdf</span></li>
-                                <li class="list-group-item">发送者ID：<span>用户A</span></li>
-                                <li class="list-group-item">接收者ID：<span>用户B</span></li>
-
-                            </ul> -->
-                            <table class="table table-hover">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">截获的密文：</th>
-                                        <td><span id="intercept_message1"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">篡改后的密文：</th>
-                                        <td><span id="tamper_message"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">发送者ID：</th>
-                                        <td><span>用户A</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">接收者ID：</th>
-                                        <td><span>用户B</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="card-footer d-flex text-muted">
-                                <button class="btn btn-space btn-secondary mb-2" id="intercept1">截获</button>
-                                <button class="btn btn-space btn-secondary mb-2" id="send1">篡改</button>
-                                <button class="btn btn-space btn-secondary mb-2" id="send1">发送</button>
-                            </div>
+                    <div class="card">
+                        <div class="card-header bg-dark text-center p-3 ">
+                            <h4 class="mb-0 text-white">篡改攻击者</h4>
+                        </div>
+                        <div class="card-body p-1">
+                            <form class="m-3">
+                                <div class="form-group row">
+                                    <label for="intercept_message1" class="col-2 col-form-label">截获密文</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="intercept_message1">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="tamper_message" class="col-2 col-form-label">篡改密文</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="tamper_message">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-2 col-form-label">发送者</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control-static" readonly value="发送者A">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-2 col-form-label">接收者</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control-static" readonly value="接收者B">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer d-flex text-muted justify-content-around">
+                            <button class="btn btn-space btn-dark mb-2" id="intercept1">截获</button>
+                            <button class="btn btn-space btn-dark mb-2" id="send1">篡改</button>
+                            <button class="btn btn-space btn-dark mb-2" id="send1">发送</button>
                         </div>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
-                        <div class="card">
-                            <div class="card-header bg-primary text-center p-3 ">
-                                <h4 class="mb-0 text-white">重放攻击者</h4>
-                            </div>
-                            <!-- <div class="card-body text-center">
-                                <h3 class="mb-1">截获的密文</h1>
-                                <p id="intercept_message2"></p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item" >重放信息：<span id="replay_message"></span></li>
-                                <li class="list-group-item">发送者ID：<span>用户A</span></li>
-                                <li class="list-group-item">接收者ID：<span>用户B</span></li>
-                            </ul> -->
-                            <table class="table table-hover">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">截获的密文</th>
-                                        <td><span id="intercept_message2"></span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">重放信息</th>
-                                        <td><span id="replay_message"></span></td>
-                                    </tr>
-
-                                    <tr>
-                                        <th scope="row">发送者ID</th>
-                                        <td><span>用户A</span></td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">接收者ID</th>
-                                        <td><span>用户B</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="card-footer d-flex text-muted">
-                                <button class="btn btn-space btn-secondary mb-2" id="intercept2">截获</button>
-                                <button class="btn btn-space btn-secondary mb-2" id="send2">发送</button>
-                            </div>
+                    <div class="card">
+                        <div class="card-header bg-dark text-center p-3 ">
+                            <h4 class="mb-0 text-white">重放攻击者</h4>
+                        </div>
+                        <div class="card-body p-1">
+                            <form class="m-3">
+                                <div class="form-group row">
+                                    <label for="intercept_message2" class="col-2 col-form-label">截获密文</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="intercept_message2">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="replay_message" class="col-2 col-form-label">重放信息</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="replay_message">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-2 col-form-label">发送者</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control-static" readonly value="发送者A">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-2 col-form-label">接收者</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control-static" readonly value="接收者B">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer d-flex text-muted d-flex justify-content-around">
+                            <button class="btn btn-space btn-dark mb-2" id="intercept2">截获</button>
+                            <button class="btn btn-space btn-dark mb-2" id="send2">发送</button>
                         </div>
                     </div>
                     <!-- ============================================================== -->
@@ -254,6 +308,23 @@
             </div>
         </div>
     </div>
+
+    <!-- 模态框，用来显示反馈的消息 -->
+    <!-- <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal_title"></h5>
+                </div>
+                <div class="modal-body">
+                    <span id="modal_content"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div> -->
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
     <!-- jquery 3.3.1 -->
@@ -280,5 +351,7 @@
     <script type="text/javascript" src="index.js"></script>
 
 </body>
+
+
 
 </html>
