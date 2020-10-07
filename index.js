@@ -12,10 +12,31 @@ var unsgin_message=""
 
 sm2 = require('./build/Release/sm2');
 
-document.getElementById("pub_a").onclick=function(){
-    return;
-}
+$(document).ready(function(){
+    $("#a_gen_key").click(function(){
+        // $('#modal').modal('show');
+        private_key = $('#a_private_key').text();
+        console.log(private_key)
+        public_key = sm2.generate_A(private_key);
+        console.log(public_key.public_A)
+        $('#a_public_key').text(public_key.public_A);
+        return;
+    })
 
+    $("#a_encrypt").click(function(){
+        $('#modal').modal('show');
+        return;
+    })
+
+})
+
+
+// document.getElementById("a_gen_key").onclick=function(){
+//     //弹出框能工作了
+//     $('#modal').modal('show');
+    
+//     return;
+// }
 document.getElementById("encrypt").onclick=function (){
 
     message = document.getElementById("message").value;

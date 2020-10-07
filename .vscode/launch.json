@@ -2,6 +2,57 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "sm2",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/SM2/build/sm2",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+          {
+              "description": "为 gdb 启用整齐打印",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+          }
+      ]
+    },
+
+
+    {
+      "name": "sm2.node",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/Release/sm2.node",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "preLaunchTask":"npm: addon_test",
+      "setupCommands": [
+          {
+              "description": "为 gdb 启用整齐打印",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+          }
+      ]
+    },
+
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "addon",
+      "program": "${workspaceFolder}/addon_test.js",
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Main",
@@ -17,12 +68,16 @@
       "request": "attach",
       "port": 9223,
       "webRoot": "${workspaceFolder}"
-    }
+    },
   ],
+  "tasks":{
+    
+  },
   "compounds": [
     {
       "name": "All",
-      "configurations": ["Main", "Renderer"]
+      "configurations": ["Main", "Renderer"],
+      // "configurations": ["Launch Program"]
     }
   ]
 }

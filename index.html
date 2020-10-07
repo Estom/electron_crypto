@@ -21,7 +21,7 @@
 </head>
 
 <body class="bg-dark" background="./assets/background/3.jpg"
-    style="background-repeat: no-repeat;background-size: 100%;background-attachment: fixed;">
+    style="background-repeat: no-repeat;background-size:cover;background-attachment: fixed;">
     <!-- ============================================================== -->
     <div class="dashboard-main-wrapper ">
         <h1 class="text-white text-center">基于SM2的解签密密码系统</h1>
@@ -35,7 +35,7 @@
                     <!-- ============================================================== -->
                     <div class="card" style="opacity: 1;">
                         <div class="card-header bg-dark text-center p-3 ">
-                            <h4 class="mb-1 text-white">发送者</h4>
+                            <h4 class="mb-1 text-white"><span class="fas fa-user"></span>发送者</h4>
                         </div>
                         <div class="card-body">
                             <form>
@@ -44,16 +44,16 @@
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1"
                                                 class="d-flex justify-content-center">私钥</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                                                placeholder="128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263"></textarea>
+                                            <textarea class="form-control" id="a_private_key" rows="3"
+                                                value="128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263">128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263</textarea>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1"
                                                 class="d-flex justify-content-center">公钥</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                                                disabled></textarea>
+                                            <textarea class="form-control" id="a_public_key" rows="3"
+                                                readonly></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -64,14 +64,14 @@
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="message" class="d-flex justify-content-center">明文</label>
-                                            <textarea class="form-control" id="message" rows="3"></textarea>
+                                            <textarea class="form-control" id="a_unsign_message" rows="3"></textarea>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="sign_message" class="d-flex justify-content-center">密文</label>
-                                            <textarea class="form-control" id="sign_message" rows="3"
-                                                disabled></textarea>
+                                            <textarea class="form-control" id="a_sign_message" rows="3"
+                                                readonly></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -85,14 +85,14 @@
                                         <th scope="row">是否成功</th>
                                         <td class="text-left">
                                             <div class="switch-button switch-button-success">
-                                                <input type="checkbox" value=false name="switch16" id="sign_flag"><span>
-                                                    <label for="sign_flag"></label></span>
+                                                <input type="checkbox" value=false name="switch16" id="sign_flag" readonly><span>
+                                                    <label for="a_sign_flag"></label></span>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">签密时间（ms）</th>
-                                        <td><span id="sign_time" class="badge badge-success"></span></td>
+                                        <td><span id="a_sign_time" class="badge badge-success"></span></td>
                                     </tr>
                                     <tr>
                                         <th scope="row">发送者ID</th>
@@ -106,16 +106,16 @@
                             </table>
                         </div>
                         <div class="card-footer d-flex text-muted justify-content-around">
-                            <button class="btn btn-space btn-dark mb-2" id="pub_a">秘钥</button>
-                            <button class="btn btn-space btn-dark mb-2" id="encrypt">签密</button>
-                            <button class="btn btn-space btn-dark mb-2" id="send">发送</button>
+                            <button class="btn btn-space btn-dark mb-2" id="a_gen_key">秘钥</button>
+                            <button class="btn btn-space btn-dark mb-2" id="a_encrypt">签密</button>
+                            <button class="btn btn-space btn-dark mb-2" id="a_send">发送</button>
 
                             <!-- <button class="btn btn-space btn-dark mb-2">Cancel</button> -->
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-header bg-dark text-center p-3 ">
-                            <h4 class="mb-0 text-white">接收者</h4>
+                            <h4 class="mb-0 text-white"><span class="fas fa-user"></span>接收者</h4>
                         </div>
                         <div class="card-body">
                             <form>
@@ -124,16 +124,16 @@
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1"
                                                 class="d-flex justify-content-center">私钥</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                                                placeholder="128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263"></textarea>
+                                            <textarea class="form-control" id="b_private_key" rows="3"
+                                                placeholder="128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263">128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263</textarea>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1"
                                                 class="d-flex justify-content-center">公钥</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                                                disabled></textarea>
+                                            <textarea class="form-control" id="b_public_key" rows="3"
+                                                readonly></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -145,14 +145,14 @@
                                         <div class="form-group">
                                             <label for="receive_message"
                                                 class="d-flex justify-content-center">密文</label>
-                                            <textarea class="form-control" id="receive_message" rows="3"
+                                            <textarea class="form-control" id="b_sign_message" rows="3"
                                                 readonly></textarea>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="unsign_message" class="d-flex justify-content-center">明文</label>
-                                            <textarea class="form-control" id="unsign_message" rows="3"
+                                            <textarea class="form-control" id="b_unsign_message" rows="3"
                                                 readonly></textarea>
                                         </div>
                                     </div>
@@ -167,8 +167,8 @@
                                         <td>
                                             <div class="switch-button switch-button-success">
                                                 <input type="checkbox" value=false name="switch16"
-                                                    id="unsign_is_unsign"><span>
-                                                    <label for="unsign_is_unsign"></label></span>
+                                                    id="b_is_unsign" readonly><span>
+                                                    <label for="b_is_unsign"></label></span>
                                             </div>
                                         </td>
                                     </tr>
@@ -177,8 +177,8 @@
                                         <td>
                                             <div class="switch-button switch-button-success">
                                                 <input type="checkbox" value=false name="switch16"
-                                                    id="unsign_is_tamper"><span>
-                                                    <label for="unsign_is_tamper"></label></span>
+                                                    id="b_is_tamper" readonly><span>
+                                                    <label for="b_is_tamper"></label></span>
                                             </div>
                                         </td>
                                     </tr>
@@ -187,18 +187,18 @@
                                         <td>
                                             <div class="switch-button switch-button-success">
                                                 <input type="checkbox" value=false name="switch16"
-                                                    id="unsign_is_replay"><span>
-                                                    <label for="unsign_is_replay"></label></span>
+                                                    id="b_is_replay" disable><span>
+                                                    <label for="b_is_replay"></label></span>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">解密时间（ms）</th>
-                                        <td><span id="unsign_time" class="badge badge-success"></span></td>
+                                        <td><span id="b_unsign_time" class="badge badge-success"></span></td>
                                     </tr>
                                     <tr>
                                         <th scope="row">时间戳</th>
-                                        <td><span id="unsign_timestamp"></span></td>
+                                        <td><span id="b_unsign_timestamp"></span></td>
                                     </tr>
                                     <tr>
                                         <th scope="row">发送者ID</th>
@@ -212,9 +212,9 @@
                             </table>
                         </div>
                         <div class="card-footer d-flex text-muted justify-content-around">
-                            <button class="btn btn-space btn-dark mb-2" id="pub_b">秘钥</button>
-                            <button class="btn btn-space btn-dark mb-2" id="receive">接收</button>
-                            <button class="btn btn-space btn-dark mb-2" id="unsign">解密</button>
+                            <button class="btn btn-space btn-dark mb-2" id="b_gen_key">秘钥</button>
+                            <button class="btn btn-space btn-dark mb-2" id="b_receive">接收</button>
+                            <button class="btn btn-space btn-dark mb-2" id="b_unsign">解密</button>
                         </div>
                     </div>
                     <!-- ============================================================== -->
@@ -233,33 +233,33 @@
                                 <div class="form-group row">
                                     <label for="intercept_message1" class="col-2 col-form-label">截获密文</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="intercept_message1">
+                                        <input type="email" class="form-control" id="c_sign_message" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="tamper_message" class="col-2 col-form-label">篡改密文</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="tamper_message">
+                                        <input type="password" class="form-control" id="c_tamper_message" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-2 col-form-label">发送者</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control-static" readonly value="发送者A">
+                                        <input type="text" class="form-control-plaintext" readonly value="发送者A">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-2 col-form-label">接收者</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control-static" readonly value="接收者B">
+                                        <input type="text" class="form-control-plaintext" readonly value="接收者B">
                                     </div>
                                 </div>
                             </form>
                         </div>
                         <div class="card-footer d-flex text-muted justify-content-around">
-                            <button class="btn btn-space btn-dark mb-2" id="intercept1">截获</button>
-                            <button class="btn btn-space btn-dark mb-2" id="send1">篡改</button>
-                            <button class="btn btn-space btn-dark mb-2" id="send1">发送</button>
+                            <button class="btn btn-space btn-dark mb-2" id="c_intercept">截获</button>
+                            <button class="btn btn-space btn-dark mb-2" id="c_tamper">篡改</button>
+                            <button class="btn btn-space btn-dark mb-2" id="c_send">发送</button>
                         </div>
                     </div>
                     <div class="card">
@@ -271,32 +271,32 @@
                                 <div class="form-group row">
                                     <label for="intercept_message2" class="col-2 col-form-label">截获密文</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="intercept_message2">
+                                        <input type="email" class="form-control" id="d_sign_message" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="replay_message" class="col-2 col-form-label">重放信息</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="replay_message">
+                                        <input type="password" class="form-control" id="d_replay_message" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-2 col-form-label">发送者</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control-static" readonly value="发送者A">
+                                        <input type="text" class="form-control-plaintext" readonly value="发送者A">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-2 col-form-label">接收者</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control-static" readonly value="接收者B">
+                                        <input type="text" class="form-control-plaintext" readonly value="接收者B">
                                     </div>
                                 </div>
                             </form>
                         </div>
                         <div class="card-footer d-flex text-muted d-flex justify-content-around">
-                            <button class="btn btn-space btn-dark mb-2" id="intercept2">截获</button>
-                            <button class="btn btn-space btn-dark mb-2" id="send2">发送</button>
+                            <button class="btn btn-space btn-dark mb-2" id="d_intercept">截获</button>
+                            <button class="btn btn-space btn-dark mb-2" id="d_send">发送</button>
                         </div>
                     </div>
                     <!-- ============================================================== -->
@@ -310,23 +310,25 @@
     </div>
 
     <!-- 模态框，用来显示反馈的消息 -->
-    <!-- <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal_title"></h5>
+                    <h5 class="modal-title" id="modal_title">Modal Title</h5>
                 </div>
                 <div class="modal-body">
-                    <span id="modal_content"></span>
+                    <span id="modal_content">Modal body text goes here.</span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
     <!-- ============================================================== -->
     <!-- Optional JavaScript -->
+    <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
     <!-- jquery 3.3.1 -->
     <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
     <!-- bootstap bundle js -->
@@ -349,7 +351,8 @@
     <script src="assets/libs/js/dashboard-ecommerce.js"></script>
 
     <script type="text/javascript" src="index.js"></script>
-
+    <!-- Insert this line after script imports -->
+    <script>if (window.module) module = window.module;</script>
 </body>
 
 

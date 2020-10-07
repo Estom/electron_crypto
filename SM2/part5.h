@@ -1,11 +1,7 @@
 ﻿#ifndef PART5_H
 #define PART5_H
 
-#include "sm2_common.h"
-#include "xy_ecpoint.h"
-#include "sm2_ec_key.h"
-#include "util.h"
-#include "sm2_test_param.h"
+#include"sm2.h"
 #include<time.h>
 #include "ec_param.h"
 
@@ -54,9 +50,9 @@ typedef struct
 } sm2_sign_st;
 
 int sm2_encrypt_copy(ec_param* ecp, message_st* message_data); //加密函数
-int sm2_decrypt_copy(ec_param* ecp, message_st* message_data);//解密函数
+int sm2_decrypt_copy(ec_param* ecp,message_st* message_data,bool* flag_replay_attack, bool* flag_tamper_attack);//解密函数
 void sm2_sign_modified(ec_param* ecp, sm2_sign_st* sign, message_st* message_data);//签名函数
-void sm2_verify_modified(ec_param* ecp, sm2_sign_st* sign, message_st* message_data);//解签名函数
+void sm2_verify_modified(ec_param* ecp, sm2_sign_st* sign, message_st* message_data, bool* flag_tamper_attack);//解签名函数
 
 //字符串时间和time_t时间转换函数
 void time_t2string(const time_t time_t_time, char* time_now);

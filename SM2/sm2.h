@@ -7,7 +7,11 @@
 #ifndef SM2_H
 #define SM2_H
 
-#include "part5.h"
+#include "sm2_common.h"
+#include "xy_ecpoint.h"
+#include "sm2_ec_key.h"
+#include "util.h"
+#include "sm2_test_param.h"
 #include<string>
 using namespace std;
 
@@ -16,6 +20,7 @@ using namespace std;
 #define TYPE_IN TYPE_GFp
 #define SM2_PARAM_IN sm2_param_recommand
 #define DELAY_TIME 20000 //ms
+#define PLAIN_LEN 150//明文长度
 
 void main_1();//带接口的签密和解签密函数
 void charArray2hex(BYTE * C,int length,string *ciphertext);

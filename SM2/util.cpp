@@ -97,16 +97,9 @@ int sm2_hex2bin(BYTE* hex_string, BYTE* bin_string, int point_byte_length)
 {
 	BIGNUM* b;
 	int ret;
-	printf("iiiiiiiii");
-
 	b = BN_new();
-	printf("qqqqqqqq");
-
 	BN_hex2bn(&b, (char*)hex_string);
-	printf("fffffffff");
 	ret = sm2_bn2bin(b, bin_string, point_byte_length);
-	printf("ggggggggg");
-
 	BN_free(b);
 	return ret;
 }

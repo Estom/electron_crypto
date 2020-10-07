@@ -96,7 +96,7 @@ int sm2_encrypt_copy(ec_param* ecp, message_st* message_data)
 	return pos1;
 }
 
-int sm2_decrypt_copy(ec_param* ecp, message_st* message_data)
+int sm2_decrypt_copy(ec_param* ecp, message_st* message_data,bool* flag_replay_attack,bool* flag_tamper_attack)
 {
 	time_t time_NOW;//解密时的时间
 	time_t time_PREV;//明文中包含的时间
@@ -111,6 +111,9 @@ int sm2_decrypt_copy(ec_param* ecp, message_st* message_data)
 	sm2_hash local_C_3;//计算u，判断是否与加密中计算的C3相等。
 	int i;
 
+	*flag_replay_attack = false;
+	*flag_tamper_attack = false;
+
 	xy1 = xy_ecpoint_new(ecp);
 	xy2 = xy_ecpoint_new(ecp);
 	d = BN_new();
@@ -124,10 +127,17 @@ int sm2_decrypt_copy(ec_param* ecp, message_st* message_data)
 	xy_ecpoint_mul_bignum(xy2, xy1, d, ecp);
 
 	//C_1是否是无穷远点.如果是，则退出。
-	if (EC_POINT_is_on_curve(ecp->group, xy1->ec_point,ecp->ctx) == 0)
-	{
-		printf("不在椭圆曲线上\n");
-		exit(0);
+	try {
+		if (EC_POINT_is_on_curve(ecp->group, xy1->ec_point, ecp->ctx) == 0)
+			throw true;
+	}
+	catch (bool flag) {
+		printf("C1不满足椭圆曲线方程，所以C1被修改，解签密失败\n");
+		*flag_tamper_attack = flag;
+		xy_ecpoint_free(xy1);
+		xy_ecpoint_free(xy2);
+		BN_free(d);
+		return 0;
 	}
 
 	pos1 = 0;
@@ -156,20 +166,42 @@ int sm2_decrypt_copy(ec_param* ecp, message_st* message_data)
 	SM3_Init();
 	SM3_Update((BYTE*)local_C_3.buffer, local_C_3.position);
 	SM3_Final_byte(local_C_3.hash);
-	if (C3_is_equal(message_data->C_3, local_C_3.hash) == 0)
+
+	try 
 	{
-		printf("C3不相等\n");
-		exit(0);
+		if (C3_is_equal(message_data->C_3, local_C_3.hash) == 0)
+			throw true;
+	}
+	catch (bool flag)
+	{
+		xy_ecpoint_free(xy1);
+		xy_ecpoint_free(xy2);
+		BN_free(d);
+		printf("C3被篡改，解签密失败\n");
+		*flag_tamper_attack = flag;
+		return 0;
 	}
 
 	//计算时间满足要求，如果超过一分钟，退出程序。
 	memcpy(time_prev, &message_data->decrypt[message_data->message_byte_length - TIMESTAMP_LEN+1], TIMESTAMP_LEN);
 	time_NOW = time(NULL);
+	char time_now[TIMESTAMP_LEN] = {'\0'};
+	time_t2string(time_NOW, time_now);
 	time_PREV = string2time_t(time_prev);
-	if ((time_NOW - time_PREV) >= MAX_TIME_DIF)
+	try {
+		if ((time_NOW - time_PREV) >= MAX_TIME_DIF)
+			throw true;
+	}
+	catch (bool flag)
 	{
-		printf("超时\n");
-		exit(0);
+		xy_ecpoint_free(xy1);
+		xy_ecpoint_free(xy2);
+		BN_free(d);
+		printf("当前时间: %s\n", time_now);
+		printf("密文解密出的时间戳: %s\n", time_prev);
+		printf("两者时间相差过大，解签密失败\n");
+		*flag_replay_attack = flag;
+		return 0;
 	}
 
 	xy_ecpoint_free(xy1);
@@ -248,7 +280,7 @@ void sm2_sign_modified(ec_param* ecp, sm2_sign_st* sign, message_st* message_dat
 	xy_ecpoint_free(xy1);
 }
 
-void sm2_verify_modified(ec_param* ecp, sm2_sign_st* sign, message_st* message_data)
+void sm2_verify_modified(ec_param* ecp, sm2_sign_st* sign, message_st* message_data, bool* flag_tamper_attack)
 {
 	sm2_hash e;
 	BIGNUM* e_bn;
@@ -262,6 +294,8 @@ void sm2_verify_modified(ec_param* ecp, sm2_sign_st* sign, message_st* message_d
 	BIGNUM* s;
 	BIGNUM* P_x;
 	BIGNUM* P_y;
+
+	*flag_tamper_attack = false;
 
 	e_bn = BN_new();
 	t = BN_new();
@@ -306,10 +340,26 @@ void sm2_verify_modified(ec_param* ecp, sm2_sign_st* sign, message_st* message_d
 	//R和r是否相等。
 	for (int i = 0; i < ecp->point_byte_length; i++)
 	{
-		if (sign->R[i] != sign->r[i])
+		try {
+			if (sign->R[i] != sign->r[i])
+				throw true;
+		}
+		catch (bool flag)
 		{
-			printf("签名验证失败\n");
-			exit(0);
+			BN_free(e_bn);
+			BN_free(t);
+			BN_free(R);
+			xy_ecpoint_free(result);
+			xy_ecpoint_free(result1);
+			xy_ecpoint_free(result2);
+			xy_ecpoint_free(P_A);
+			BN_free(r);
+			BN_free(s);
+			BN_free(P_x);
+			BN_free(P_y);
+			printf("解签密失败\n");
+			*flag_tamper_attack = flag;
+			return;
 		}
 	}
 

@@ -4,11 +4,10 @@
         > E-mail:newplan001@163.com
         > Created Time: Thu Apr 13 23:55:50 2017
  ************************************************************************/
-#include"sm2_common.h"
 #ifndef SM2_TEST_PARAM_H
 #define SM2_TEST_PARAM_H
-
-#define MES_LEN 2000
+#define MES_LEN 1024
+#include"sm2_common.h"
 
 extern char* sm2_param_recommand[];
 
@@ -34,7 +33,6 @@ extern char* message_digest;
 
 extern char* ID_A;
 extern char* ID_B;
-
 
 extern ec_param* ecp;
 extern ec_param* ecp2;

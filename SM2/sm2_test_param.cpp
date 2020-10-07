@@ -9,6 +9,9 @@
 #include <string.h>
 
 #include "sm2_test_param.h"
+#include<openssl/ec.h>
+#include"ec_param.h"
+#include "sm2_ec_key.h"
 
  //�Ƽ����ߣ�
  //y2 = x3 + ax + b��
@@ -157,9 +160,7 @@ int sm2_param_dh_h[2] =
 {
 	1	, 4
 };
-
-
-ec_param* ecp=NULL;
-ec_param* ecp2=NULL;
-sm2_ec_key* key_A=NULL;
-sm2_ec_key* key_B=NULL;
+ec_param* ecp = NULL;
+ec_param* ecp2 = NULL;
+sm2_ec_key* key_A = NULL;
+sm2_ec_key* key_B = NULL;

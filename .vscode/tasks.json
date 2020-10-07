@@ -1,0 +1,20 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "addon_test",
+			"problemMatcher": [],
+			"label": "npm: addon_test",
+			"detail": "node addon_test.js"
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build",
+			"detail": "cmake-js rebuild"
+		}
+	]
+}
