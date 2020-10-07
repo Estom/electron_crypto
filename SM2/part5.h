@@ -6,7 +6,7 @@
 #include "ec_param.h"
 
 #define TIMESTAMP_LEN 20 //时间戳的长度
-#define MAX_TIME_DIF 10//最大时间差距，单位秒
+#define MAX_TIME_DIF 60//最大时间差距，单位秒
 
 typedef struct
 {

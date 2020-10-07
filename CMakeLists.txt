@@ -4,7 +4,7 @@ set(CMAKE_VERBOSE_MAKEFILE on )
 add_compile_options(-std=c99 -Wall)
 
 # 启动调试
-# set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Debug)
 
 # 给出工程名字
 project(sm2)

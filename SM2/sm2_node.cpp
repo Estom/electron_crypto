@@ -256,13 +256,13 @@ napi_value unsigncryption_method(napi_env env, const napi_callback_info info)
     size_t length = 0;
     status = napi_get_value_string_utf8(env, args[0], NULL, 0, &length);
     assert(status == napi_ok);
-    char *buff = (char *)malloc(255);
+    char *buff = (char *)malloc(8000*sizeof(char));
     status = napi_get_value_string_utf8(env, args[0], buff, length + 1, &length);
     assert(status == napi_ok);
     buff[length] = '\0';
 
     //调用解签密函数
-    string plaintext = "buff";          //明文
+    string plaintext;          //明文
     string ciphertext = buff; //密文
     double time_unsigncrytion = 0.78; //解签密所用的时间（毫秒）
     bool flag_unsigncrytion = 0;      //解签密是否成功
@@ -329,7 +329,7 @@ napi_value intercept_cipher_method(napi_env env, const napi_callback_info info)
     size_t length = 0;
     status = napi_get_value_string_utf8(env, args[0], NULL, 0, &length);
     assert(status == napi_ok);
-    char *buff = (char *)malloc(255);
+    char *buff = (char *)malloc(8000);
     status = napi_get_value_string_utf8(env, args[0], buff, length + 1, &length);
     assert(status == napi_ok);
     buff[length] = '\0';
@@ -337,7 +337,7 @@ napi_value intercept_cipher_method(napi_env env, const napi_callback_info info)
     //密文截获函数的参数
     string ciphertext_signcrytion = buff; //签密产生的密文
     string intercepted_ciphertext;        //截获到的密文
-    bool flag_intercept = 0;              //是否截获成功
+    bool flag_intercept = 1;              //是否截获成功
     intercept_cipher(ciphertext_signcrytion, &flag_intercept, &intercepted_ciphertext);
 
     //类型转换
@@ -378,14 +378,14 @@ napi_value tamper_attack_method(napi_env env, const napi_callback_info info)
     size_t length = 0;
     status = napi_get_value_string_utf8(env, args[0], NULL, 0, &length);
     assert(status == napi_ok);
-    char *buff = (char *)malloc(255);
+    char *buff = (char *)malloc(8000);
     status = napi_get_value_string_utf8(env, args[0], buff, length + 1, &length);
     assert(status == napi_ok);
     buff[length] = '\0';
 
     //密文篡改攻击函数的参数
     string intercepted_ciphertext = buff;
-    bool flag_do_tamper = 0; //是否进行密文篡改攻击
+    bool flag_do_tamper = 1; //是否进行密文篡改攻击
     string ciphertext_new;   //篡改后的密文
     tamper_attack(intercepted_ciphertext, &flag_do_tamper, &ciphertext_new);
 
@@ -427,14 +427,14 @@ napi_value replay_attack_method(napi_env env, const napi_callback_info info)
     size_t length = 0;
     status = napi_get_value_string_utf8(env, args[0], NULL, 0, &length);
     assert(status == napi_ok);
-    char *buff = (char *)malloc(255);
+    char *buff = (char *)malloc(8000);
     status = napi_get_value_string_utf8(env, args[0], buff, length + 1, &length);
     assert(status == napi_ok);
     buff[length] = '\0';
 
     //消息重放攻击函数的参数
     string intercepted_ciphertext = buff;
-    bool flag_do_replay = 0; //是否进行消息重放攻击
+    bool flag_do_replay = 1; //是否进行消息重放攻击
     string ciphertext_unsigncrytion = "fjie";
     replay_attack(intercepted_ciphertext, &flag_do_replay, &ciphertext_unsigncrytion);
 
@@ -475,7 +475,7 @@ napi_value generate_A(napi_env env, const napi_callback_info info){
     size_t length = 0;
     status = napi_get_value_string_utf8(env, args[0], NULL, 0, &length);
     assert(status == napi_ok);
-    char *buff = (char *)malloc(255);
+    char *buff = (char *)malloc(8000);
     status = napi_get_value_string_utf8(env, args[0], buff, length + 1, &length);
     assert(status == napi_ok);
     buff[length] = '\0';
@@ -518,7 +518,7 @@ napi_value generate_B(napi_env env, const napi_callback_info info){
     size_t length = 0;
     status = napi_get_value_string_utf8(env, args[0], NULL, 0, &length);
     assert(status == napi_ok);
-    char *buff = (char *)malloc(255);
+    char *buff = (char *)malloc(8000);
     status = napi_get_value_string_utf8(env, args[0], buff, length + 1, &length);
     assert(status == napi_ok);
     buff[length] = '\0';

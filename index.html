@@ -85,13 +85,13 @@
                                         <th scope="row">是否成功</th>
                                         <td class="text-left">
                                             <div class="switch-button switch-button-success">
-                                                <input type="checkbox" value=false name="switch16" id="sign_flag" readonly><span>
+                                                <input type="checkbox" value=false name="switch16" id="a_sign_flag" readonly><span>
                                                     <label for="a_sign_flag"></label></span>
                                             </div>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">签密时间（ms）</th>
+                                        <th scope="row">签密时间（us）</th>
                                         <td><span id="a_sign_time" class="badge badge-success"></span></td>
                                     </tr>
                                     <tr>
@@ -193,7 +193,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">解密时间（ms）</th>
+                                        <th scope="row">解密时间（us）</th>
                                         <td><span id="b_unsign_time" class="badge badge-success"></span></td>
                                     </tr>
                                     <tr>
@@ -233,13 +233,13 @@
                                 <div class="form-group row">
                                     <label for="intercept_message1" class="col-2 col-form-label">截获密文</label>
                                     <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="c_sign_message" readonly>
+                                        <input type="text" class="form-control" id="c_sign_message" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="tamper_message" class="col-2 col-form-label">篡改密文</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="c_tamper_message" readonly>
+                                        <input type="text" class="form-control" id="c_tamper_message" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -277,7 +277,7 @@
                                 <div class="form-group row">
                                     <label for="replay_message" class="col-2 col-form-label">重放信息</label>
                                     <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="d_replay_message" readonly>
+                                        <input type="text" class="form-control" id="d_replay_message" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">

@@ -263,11 +263,14 @@ void unsigncryption(string ciphertext, bool* flag_unsigncrytion, string* plainte
 	hex2charArray(message_data.C, ciphertext);
 	//printf("%s\n", message_data.C);
 	int C_length = ciphertext.length() / 2;
+	// printf("%d\n",C_length);
 	sm2_bn2bin(key_B->d, message_data.private_key, ecp->point_byte_length);//b的私钥
 	message_data.message_byte_length = C_length - 1 - 4 * ecp->point_byte_length - HASH_BYTE_LENGTH;
+	// printf("%d\n",message_data.message_byte_length);
 	message_data.klen_bit = message_data.message_byte_length * 8;
 
 	message_data.decrypt = (BYTE*)OPENSSL_malloc(message_data.message_byte_length + 1);
+	// printf("%d\n",ecp->point_byte_length);
 	memset(message_data.decrypt, '\0', message_data.message_byte_length + 1);
 
 	int pos1 = 0;
@@ -407,15 +410,14 @@ void tamper_attack(string intercepted_ciphertext, bool* flag_do_tamper, string* 
 	strcpy(temp,intercepted_ciphertext.c_str());
 	if (intercepted_ciphertext == "")
 		*flag_do_tamper = false;
-	int length = 32;//篡改C1
-	//int length = intercepted_ciphertext.length(); //全文篡改
+	int length = intercepted_ciphertext.length(); //全文篡改
 	vector<int> hasUsed;
 	if (*flag_do_tamper)
 	{
 		int number = rand()% length;
 		for (int i = 0; i < number; i++)
 		{
-			int index = rand() % length+298*2;
+			int index = rand() % length;
 			if (find(hasUsed.begin(), hasUsed.end(), index) == hasUsed.end())
 			{
 				if(rand()%2==0)
