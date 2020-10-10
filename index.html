@@ -17,14 +17,14 @@
     <link rel="stylesheet" href="assets/vendor/charts/c3charts/c3.css">
     <link rel="stylesheet" href="assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
 
-    <title>基于SM2的解签密密码系统</title>
+    <title>基于SM2的签密密码系统</title>
 </head>
 
 <body class="bg-dark" background="./assets/background/3.jpg"
     style="background-repeat: no-repeat;background-size:cover;background-attachment: fixed;">
     <!-- ============================================================== -->
     <div class="dashboard-main-wrapper ">
-        <h1 class="text-white text-center">基于SM2的解签密密码系统</h1>
+            <h1 class="text-white text-center display-4">基于SM2的签密密码系统</h1>
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="influence-finder">
@@ -84,10 +84,12 @@
                                     <tr>
                                         <th scope="row">是否成功</th>
                                         <td class="text-left">
-                                            <div class="switch-button switch-button-success">
+                                            <span id="a_sign_flag" class="badge badge-success"></span>
+
+                                            <!-- <div class="switch-button switch-button-success">
                                                 <input type="checkbox" value=false name="switch16" id="a_sign_flag" readonly><span>
                                                     <label for="a_sign_flag"></label></span>
-                                            </div>
+                                            </div> -->
                                         </td>
                                     </tr>
                                     <tr>
@@ -106,7 +108,7 @@
                             </table>
                         </div>
                         <div class="card-footer d-flex text-muted justify-content-around">
-                            <button class="btn btn-space btn-dark mb-2" id="a_gen_key">秘钥</button>
+                            <button class="btn btn-space btn-dark mb-2" id="a_gen_key">生成公钥</button>
                             <button class="btn btn-space btn-dark mb-2" id="a_encrypt">签密</button>
                             <button class="btn btn-space btn-dark mb-2" id="a_send">发送</button>
 
@@ -165,31 +167,36 @@
                                     <tr>
                                         <th scope="row">是否解签密</th>
                                         <td>
-                                            <div class="switch-button switch-button-success">
+                                            <span id="b_is_unsign" class="badge badge-success"></span>
+
+                                            <!-- <div class="switch-button switch-button-success">
                                                 <input type="checkbox" value=false name="switch16"
                                                     id="b_is_unsign" readonly><span>
                                                     <label for="b_is_unsign"></label></span>
-                                            </div>
+                                            </div> -->
                                         </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">是否被篡改</th>
                                         <td>
-                                            <div class="switch-button switch-button-success">
+                                            <span id="b_is_tamper" class="badge badge-success"></span>
+
+                                            <!-- <div class="switch-button switch-button-success">
                                                 <input type="checkbox" value=false name="switch16"
                                                     id="b_is_tamper" readonly><span>
                                                     <label for="b_is_tamper"></label></span>
-                                            </div>
+                                            </div> -->
                                         </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">是否被重放：</th>
                                         <td>
-                                            <div class="switch-button switch-button-success">
+                                            <span id="b_is_replay" class="badge badge-success"></span>
+                                            <!-- <div class="switch-button switch-button-success">
                                                 <input type="checkbox" value=false name="switch16"
                                                     id="b_is_replay" disable><span>
                                                     <label for="b_is_replay"></label></span>
-                                            </div>
+                                            </div> -->
                                         </td>
                                     </tr>
                                     <tr>
@@ -212,7 +219,7 @@
                             </table>
                         </div>
                         <div class="card-footer d-flex text-muted justify-content-around">
-                            <button class="btn btn-space btn-dark mb-2" id="b_gen_key">秘钥</button>
+                            <button class="btn btn-space btn-dark mb-2" id="b_gen_key">生成公钥</button>
                             <button class="btn btn-space btn-dark mb-2" id="b_receive">接收</button>
                             <button class="btn btn-space btn-dark mb-2" id="b_unsign">解密</button>
                         </div>
@@ -245,13 +252,13 @@
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-2 col-form-label">发送者</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control-plaintext" readonly value="发送者A">
+                                        <input type="text" class="form-control-plaintext" readonly value="用户A">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-2 col-form-label">接收者</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control-plaintext" readonly value="接收者B">
+                                        <input type="text" class="form-control-plaintext" readonly value="用户B">
                                     </div>
                                 </div>
                             </form>
@@ -283,13 +290,13 @@
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-2 col-form-label">发送者</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control-plaintext" readonly value="发送者A">
+                                        <input type="text" class="form-control-plaintext" readonly value="用户A">
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="inputPassword3" class="col-2 col-form-label">接收者</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control-plaintext" readonly value="接收者B">
+                                        <input type="text" class="form-control-plaintext" readonly value="用户B">
                                     </div>
                                 </div>
                             </form>

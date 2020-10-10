@@ -13,7 +13,7 @@ function createWindow() {
   // 并且为你的应用加载index.html
   win.loadFile('index.html')
   //electron. --inspect启动调试
-  win.webContents.openDevTools();
+  // win.webContents.openDevTools();
 }
 
 app.whenReady().then(createWindow)

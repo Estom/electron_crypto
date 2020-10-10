@@ -39,14 +39,15 @@ $(document).ready(function(){
         var result = sm2.signcryption(message.a_unsign_message);
         message.a_sign_message = result.ciphertext;
 
+        
         //显示
         $('#a_sign_message').val(result.ciphertext);
         if(result.flag_signcrytion==1){
-            $('#a_sign_flag').attr('checked','');
+            $('#a_sign_flag').text('是');
             // console.log(1111)
         }
         else{
-            $('#a_sign_flag').removeAttr('checked');
+            $('#a_sign_flag').text('否');
             console.log(222)
         }
         $('#a_sign_time').text(result.time_signcrytion);
@@ -74,31 +75,33 @@ $(document).ready(function(){
         message.b_unsign_message = result.plaintext;
 
         if(result.flag_unsigncrytion==1){
-            $('#b_is_unsign').attr('checked','');
+            $('#b_is_unsign').text('是');
             $('#b_unsign_message').val(message.b_unsign_message);
             $('#b_unsign_time').text(result.time_unsigncrytion);
             $('#b_unsign_timestamp').text(result.timestamp)
         }
         else{
-            $('#b_is_unsign').removeAttr('checked');
+            $('#b_is_unsign').text('否');
+            $('#b_unsign_time').text('');
+            $('#b_unsign_timestamp').text('')
         }
 
         if(result.flag_tamper_attack==1){
-            $('#b_is_tamper').attr('checked','');
+            $('#b_is_tamper').text('是');
             $('#b_unsign_message').val('failed ,tamper');
 
         }
         else{
-            $('#b_is_tamper').removeAttr('checked');
+            $('#b_is_tamper').text('否');
         }
 
         if(result.flag_replay_attack==1){
-            $('#b_is_replay').attr('checked','');
+            $('#b_is_replay').text('是');
             $('#b_unsign_message').val('failed ,replay');
 
         }
         else{
-            $('#b_is_replay').removeAttr('checked');
+            $('#b_is_replay').text('否');
 
         }
 
