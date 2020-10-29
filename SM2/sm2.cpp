@@ -6,14 +6,7 @@
  ************************************************************************/
 #pragma comment(lib,"libssl.lib")
 #pragma comment(lib,"libcrypto.lib")
-#include <ctime>
-#include <stdio.h>
-#include<iostream>
 #include "part5.h"
-#include<cstdlib>
-#include<vector>
-#include<algorithm>
-#include<sys/time.h>
 
 int main()
 {
@@ -451,7 +444,7 @@ void replay_attack(string intercepted_ciphertext, bool* flag_do_replay, string* 
 	return;
 }
 
-void gen_pub_from_pri_B(string private_key_str,string *public_B)
+void gen_pub_from_pri_B(string private_key_str,string *public_B,sm2_ec_key* key_B)
 {
 	ecp = ec_param_new();
 	ec_param_init(ecp, SM2_PARAM_IN, TYPE_IN, POINT_BIT_LENGTH_IN);
@@ -460,7 +453,7 @@ void gen_pub_from_pri_B(string private_key_str,string *public_B)
 	*public_B = BN_bn2hex(key_B->P->x);
 	public_B->append((char *)BN_bn2hex(key_B->P->y));
 }
-void gen_pub_from_pri_A(string private_key_str,string *public_A)
+void gen_pub_from_pri_A(string private_key_str,string *public_A,sm2_ec_key* key_A)
 {
 	ecp2 = ec_param_new();
 	ec_param_init(ecp2, SM2_PARAM_IN, TYPE_IN, POINT_BIT_LENGTH_IN);
@@ -468,4 +461,90 @@ void gen_pub_from_pri_A(string private_key_str,string *public_A)
 	sm2_ec_key_init(key_A, (char*)private_key_str.c_str(), ecp2);
 	*public_A = BN_bn2hex(key_A->P->x);
 	public_A->append((char*)BN_bn2hex(key_A->P->y));
+}
+
+void send_msg(string msg,char* ip_add,int port)
+{
+	int sockfd,n;
+	char recvline[MAXLINE],sendline[MAXLINE];
+	struct sockaddr_in servaddr;
+
+	if ((sockfd=socket(AF_INET,SOCK_STREAM,0))<0)
+	{
+		printf("create socket error\n");
+		return;
+	}
+
+	memset(&servaddr,0,sizeof(servaddr));
+	servaddr.sin_family=AF_INET;
+	servaddr.sin_port=htons(port);
+	if(inet_pton(AF_INET,ip_add,&servaddr.sin_addr)<=0)
+	{
+		printf("inet_pton error\n");
+		return;
+	}
+
+	if(connect(sockfd,(struct sockaddr*)&servaddr,sizeof(servaddr))<0)
+	{
+		printf("connect error\n");
+		return;
+	}
+
+	printf("send msg to server\n");
+	printf("%s\n",msg.c_str());
+	if (send(sockfd,msg.c_str(),msg.length(),0)<0)
+	{
+		printf("send error\n");
+		return;
+	}
+	close(sockfd);
+	return;
+}	
+void recv_msg(string *msg,int port)
+{
+	int listenfd,connfd;
+	struct sockaddr_in servaddr;
+	char buff[4096];
+	int n;
+	if((listenfd = socket(AF_INET,SOCK_STREAM,0))==-1)
+	{
+		printf("create socket error\n");
+		return;
+	}
+
+	memset(&servaddr,0,sizeof(servaddr));
+	servaddr.sin_family = AF_INET;
+	servaddr.sin_addr.s_addr = INADDR_ANY;
+	servaddr.sin_port = htons(port);
+
+	if(bind(listenfd,(struct sockaddr*)&servaddr,sizeof(servaddr))==-1)
+	{
+		printf("bind socket error\n");
+		return;
+	}
+
+	if(listen(listenfd,10)==-1)
+	{
+		printf("listen socket error\n");
+		return;
+	}
+
+	printf("========waiting for clients request==========");
+
+	while(1)
+	{
+		if((connfd=accept(listenfd,(struct sockaddr *)NULL,NULL))==-1)
+		{
+			printf("accept socket error\n");
+			continue;
+		}
+		n = recv(connfd,buff,MAXLINE,0);
+		buff[n]='\0';
+		printf("recv msg :%s\n",buff);
+		close(connfd);
+		break;
+	}
+	close(listenfd);
+	*msg = buff;
+	return;
 }

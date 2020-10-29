@@ -13,6 +13,20 @@
 #include "util.h"
 #include "sm2_test_param.h"
 #include<string>
+#include<stdlib.h>
+#include<string.h>
+#include<sys/types.h>
+#include<sys/socket.h>
+#include<netinet/in.h>
+#include<arpa/inet.h>
+#include<unistd.h>
+#include <stdio.h>
+#include<iostream>
+#include <ctime>
+#include<cstdlib>
+#include<vector>
+#include<algorithm>
+#include<sys/time.h>
 using namespace std;
 
 
@@ -21,6 +35,7 @@ using namespace std;
 #define SM2_PARAM_IN sm2_param_recommand
 #define DELAY_TIME 20000 //ms
 #define PLAIN_LEN 150//明文长度
+#define MAXLINE 2000
 
 void main_1();//带接口的签密和解签密函数
 void charArray2hex(BYTE * C,int length,string *ciphertext);
@@ -39,7 +54,11 @@ void tamper_attack(string intercepted_ciphertext, bool* flag_do_tamper, string* 
 void replay_attack(string intercepted_ciphertext, bool* flag_do_replay, string* ciphertext);
 
 //由私钥生成公钥
-void gen_pub_from_pri_A(string private_key_str,string *public_A);
-void gen_pub_from_pri_B(string private_key_str,string *public_B);
+void gen_pub_from_pri_A(string private_key_str,string *public_A,sm2_ec_key* key_A);
+void gen_pub_from_pri_B(string private_key_str,string *public_B,sm2_ec_key* key_B);
+
+//socket communication
+void send_msg(string msg,char* ip_add,int port);
+void recv_msg(string *msg,int port);
 
 #endif

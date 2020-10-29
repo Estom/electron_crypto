@@ -160,7 +160,8 @@ int sm2_param_dh_h[2] =
 {
 	1	, 4
 };
-ec_param* ecp = NULL;
-ec_param* ecp2 = NULL;
-sm2_ec_key* key_A = NULL;
-sm2_ec_key* key_B = NULL;
+
+//ec_param* ecp = NULL;
+//ec_param* ecp2 = NULL;
+//sm2_ec_key* key_A = NULL;
+//sm2_ec_key* key_B = NULL;
