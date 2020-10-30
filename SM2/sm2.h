@@ -42,9 +42,12 @@ void charArray2hex(BYTE * C,int length,string *ciphertext);
 //将字符数组转换成十六进制的数组，然后在转换成string数组
 void hex2charArray(BYTE* C, string ciphertext);
 
-void signcryption(string plaintext,bool *flag_signcrytion,string *ciphertext,double *time_signcrytion);//签密函数
-void unsigncryption(string ciphertext, bool* flag_unsigncryption, string* plaintext, double* time_unsigncryption, \
-    bool* flag_replay_attack, bool* flag_tamper_attack,string *timestamp);//解签密函数
+void signcryption(string plaintext,bool *flag_signcrytion,string *ciphertext,double *time_signcrytion,\
+    sm2_ec_key* key_A,sm2_ec_key* key_B,ec_param* ecp);//签密函数
+
+void unsigncryption(string ciphertext, bool* flag_unsigncryption, string* plaintext,  \
+    sm2_ec_key* key_B,sm2_ec_key* key_A,ec_param* ecp2,\
+    double* time_unsigncryption,bool* flag_replay_attack, bool* flag_tamper_attack,string *timestamp);//解签密函数
 
 //密文截获函数
 void intercept_cipher(string ciphertext, bool* flag_intercept, string* intercepted_ciphertext);
@@ -54,8 +57,8 @@ void tamper_attack(string intercepted_ciphertext, bool* flag_do_tamper, string* 
 void replay_attack(string intercepted_ciphertext, bool* flag_do_replay, string* ciphertext);
 
 //由私钥生成公钥
-void gen_pub_from_pri_A(string private_key_str,string *public_A,sm2_ec_key* key_A);
-void gen_pub_from_pri_B(string private_key_str,string *public_B,sm2_ec_key* key_B);
+void gen_pub_from_pri_A(string private_key_str,string *public_A_x,string *public_A_y,sm2_ec_key* key_A,ec_param *ecp);
+void gen_pub_from_pri_B(string private_key_str,string *public_B_x,string *public_B_y,sm2_ec_key* key_B,ec_param *ecp2);
 
 //socket communication
 void send_msg(string msg,char* ip_add,int port);

@@ -56,8 +56,8 @@ void main_1()
 	gen_plaintext(PLAIN_LEN, &plaintext);
 
 	//初始化密钥
-	gen_pub_from_pri_A(private_A,&public_A);
-	gen_pub_from_pri_B(private_B,&public_B);
+	//gen_pub_from_pri_A(private_A,&public_A);
+	//gen_pub_from_pri_B(private_B,&public_B);
 
 	//显示明文，十六进制
 	//string plaintext_hex;
@@ -66,8 +66,8 @@ void main_1()
 
 	
 	//正常加解密
-	signcryption(plaintext, &flag_signcrytion, &ciphertext, &time_signcrytion);
-	unsigncryption(ciphertext, &flag_unsigncrytion, &de_plaintext, \
+	//signcryption(plaintext, &flag_signcrytion, &ciphertext, &time_signcrytion);
+	//unsigncryption(ciphertext, &flag_unsigncrytion, &de_plaintext, \
 		&time_unsigncrytion, &flag_replay_attack, &flag_tamper_attack, &timestamp);
 	//cout << ciphertext << endl;
 	printf("加密时间:%lfus\n", time_signcrytion);
@@ -110,7 +110,8 @@ void main_1()
 
 	return;
 }
-void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, double* time_signcrytion)
+void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, double* time_signcrytion,\
+		sm2_ec_key* key_A,sm2_ec_key* key_B,ec_param* ecp)
 {
 	int state = 0;//状态变量，代表状态
 	struct timeval start;
@@ -145,11 +146,6 @@ void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, 
 			sm2_hex2bin((BYTE*)sm2_param_k[ecp->type], message_data.k, ecp->point_byte_length);
 			sm2_bn2bin(key_B->P->x, message_data.public_key.x, ecp->point_byte_length);
 			sm2_bn2bin(key_B->P->y, message_data.public_key.y, ecp->point_byte_length);
-			if (PRINT_MESSAGE) {
-				//DEFINE_SHOW_BIGNUM(key_B->d);
-				DEFINE_SHOW_BIGNUM(key_B->P->x);
-				DEFINE_SHOW_BIGNUM(key_B->P->y);
-			}
 
 			/* enc-dec init end*/
 
@@ -158,18 +154,14 @@ void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, 
 			break;
 		case 1: //签名过程，初始化。
 			/* sig-ver init begin */
-			sm2_hex2bin((BYTE*)sm2_param_digest_k[ecp2->type], sign.k, ecp2->point_byte_length);
-			sm2_bn2bin(key_A->d, sign.private_key, ecp2->point_byte_length);
-			sm2_bn2bin(key_A->P->x, sign.public_key.x, ecp2->point_byte_length);
-			sm2_bn2bin(key_A->P->y, sign.public_key.y, ecp2->point_byte_length);
+			sm2_hex2bin((BYTE*)sm2_param_digest_k[ecp->type], sign.k, ecp->point_byte_length);
+			sm2_bn2bin(key_A->d, sign.private_key, ecp->point_byte_length);
+			sm2_bn2bin(key_A->P->x, sign.public_key.x, ecp->point_byte_length);
+			sm2_bn2bin(key_A->P->y, sign.public_key.y, ecp->point_byte_length);
 
-			if (PRINT_MESSAGE) {
-				DEFINE_SHOW_STRING(sign_array[i].public_key.x, ecp2_array[i]->point_byte_length);
-				DEFINE_SHOW_STRING(sign_array[i].public_key.y, ecp2_array[i]->point_byte_length);
-			}
 			/* sig-ver init end */
 
-			sm2_sign_modified(ecp2, &sign, &message_data);
+			sm2_sign_modified(ecp, &sign, &message_data);
 			BN_bin2bn(sign.r, ecp->point_byte_length, r);
 			if (BN_is_zero(r) == 1) //如果r是0的话，返回第一个状态
 			{
@@ -195,16 +187,6 @@ void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, 
 			break;
 	}
 
-	/* enc-dec free begin */
-
-	//sm2_ec_key_free(key_B);
-	//ec_param_free(ecp);
-
-	/* sig-ver free begin */
-	//sm2_ec_key_free(key_A);
-	//ec_param_free(ecp2);
-	/* sig-ver free end */
-
 	*flag_signcrytion = true;
 	//将r和s附在文件末尾
 	BUFFER_APPEND_STRING(message_data.C, pos, ecp->point_byte_length, sign.r);
@@ -217,6 +199,7 @@ void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, 
 	return;
 }
 void unsigncryption(string ciphertext, bool* flag_unsigncrytion, string* plaintext, \
+	sm2_ec_key* key_B,sm2_ec_key* key_A,ec_param* ecp2, \
 	double* time_unsigncrytion, bool* flag_replay_attack, bool* flag_tamper_attack, string* timestamp)
 {
 	*flag_replay_attack = false;
@@ -257,8 +240,8 @@ void unsigncryption(string ciphertext, bool* flag_unsigncrytion, string* plainte
 	//printf("%s\n", message_data.C);
 	int C_length = ciphertext.length() / 2;
 	// printf("%d\n",C_length);
-	sm2_bn2bin(key_B->d, message_data.private_key, ecp->point_byte_length);//b的私钥
-	message_data.message_byte_length = C_length - 1 - 4 * ecp->point_byte_length - HASH_BYTE_LENGTH;
+	sm2_bn2bin(key_B->d, message_data.private_key, ecp2->point_byte_length);//b的私钥
+	message_data.message_byte_length = C_length - 1 - 4 * ecp2->point_byte_length - HASH_BYTE_LENGTH;
 	// printf("%d\n",message_data.message_byte_length);
 	message_data.klen_bit = message_data.message_byte_length * 8;
 
@@ -444,23 +427,23 @@ void replay_attack(string intercepted_ciphertext, bool* flag_do_replay, string* 
 	return;
 }
 
-void gen_pub_from_pri_B(string private_key_str,string *public_B,sm2_ec_key* key_B)
-{
-	ecp = ec_param_new();
-	ec_param_init(ecp, SM2_PARAM_IN, TYPE_IN, POINT_BIT_LENGTH_IN);
-	key_B = sm2_ec_key_new(ecp);
-	sm2_ec_key_init(key_B, (char*)private_key_str.c_str(), ecp);
-	*public_B = BN_bn2hex(key_B->P->x);
-	public_B->append((char *)BN_bn2hex(key_B->P->y));
-}
-void gen_pub_from_pri_A(string private_key_str,string *public_A,sm2_ec_key* key_A)
+void gen_pub_from_pri_B(string private_key_str,string *public_B_x,string *public_B_y,sm2_ec_key* key_B,ec_param *ecp2)
 {
 	ecp2 = ec_param_new();
 	ec_param_init(ecp2, SM2_PARAM_IN, TYPE_IN, POINT_BIT_LENGTH_IN);
-	key_A = sm2_ec_key_new(ecp2);
-	sm2_ec_key_init(key_A, (char*)private_key_str.c_str(), ecp2);
-	*public_A = BN_bn2hex(key_A->P->x);
-	public_A->append((char*)BN_bn2hex(key_A->P->y));
+	key_B = sm2_ec_key_new(ecp2);
+	sm2_ec_key_init(key_B, (char*)private_key_str.c_str(), ecp2);
+	*public_B_x = BN_bn2hex(key_B->P->x);
+	*public_B_y = BN_bn2hex(key_B->P->y);
+}
+void gen_pub_from_pri_A(string private_key_str,string *public_A_x,string *public_A_y,sm2_ec_key* key_A,ec_param* ecp)
+{
+	ecp = ec_param_new();
+	ec_param_init(ecp, SM2_PARAM_IN, TYPE_IN, POINT_BIT_LENGTH_IN);
+	key_A = sm2_ec_key_new(ecp);
+	sm2_ec_key_init(key_A, (char*)private_key_str.c_str(), ecp);
+	*public_A_x = BN_bn2hex(key_A->P->x);
+	*public_A_y = BN_bn2hex(key_A->P->y);
 }
 
 void send_msg(string msg,char* ip_add,int port)
@@ -512,22 +495,22 @@ void recv_msg(string *msg,int port)
 		return;
 	}
 
-	memset(&servaddr,0,sizeof(servaddr));
-	servaddr.sin_family = AF_INET;
-	servaddr.sin_addr.s_addr = INADDR_ANY;
-	servaddr.sin_port = htons(port);
+		memset(&servaddr,0,sizeof(servaddr));
+		servaddr.sin_family = AF_INET;
+		servaddr.sin_addr.s_addr = INADDR_ANY;
+		servaddr.sin_port = htons(port);
 
-	if(bind(listenfd,(struct sockaddr*)&servaddr,sizeof(servaddr))==-1)
-	{
-		printf("bind socket error\n");
-		return;
-	}
+		if(bind(listenfd,(struct sockaddr*)&servaddr,sizeof(servaddr))==-1)
+		{
+			printf("bind socket error\n");
+			return;
+		}
 
-	if(listen(listenfd,10)==-1)
-	{
-		printf("listen socket error\n");
-		return;
-	}
+		if(listen(listenfd,10)==-1)
+		{
+			printf("listen socket error\n");
+			return;
+		}
 
 	printf("========waiting for clients request==========");
 

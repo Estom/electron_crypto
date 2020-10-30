@@ -2,62 +2,225 @@
 
 int main()
 {
+	main_function();
+    return 0;
+}
+void main_function()
+{
     string private_A;
     string plaintext;
     string ciphertext;
     double time_signcrytion;
-    string public_A;
-    string public_B;
+	bool flag_signcryption;
+    string public_A_x; //ru guo shi xiangtong de changdu ,ze jinxingxiugai
+	string public_A_y;
+    string public_B_x;
+	string public_B_y;
 
     sm2_ec_key* key_A = NULL;
     sm2_ec_key* key_B = NULL;
+	ec_param* ecp;
 
-    int state = 0;
-    while(1)
-    {
-        switch (state)
-        {
-        case 0:
-            re_private_A(&private_A);
-            state = 1;
-            break;
-        case 1:
-            
-        default:
-            break;
-        }
-    }
-    return 0;
-}
-void re_private_A(string *private_A)
-{
-    recv_msg(private_A,LISTENPORT);
-    return;
-}
-void re_plaintext(string *plaintext)
-{
-    recv_msg(plaintext,LISTENPORT);
-    return;
-}
+	int state=0; // state flag
+	char buff[MAXLINE];
+	int revlength;
+	string temp;
 
-void send_public(string public_A)
-{
-    send_msg(public_A,BIP,SENDPORT);
-    return;
-}
-void re_public_B(string *public_B)
-{
-    recv_msg(public_B,LISTENPORT);
-    return;
-}
+    int listenfd,sendInfd,sendBfd,connfd;
+    struct sockaddr_in sendaddr,listenaddr;
 
-void send_ciphertext(string ciphertext)
-{
-    send_msg(ciphertext,BIP,SENDPORT);
-    return;
-}
-void send_timesign(double time_signcrytion)
-{
-    send_msg(to_string(time_signcrytion),BIP,SENDPORT);
-    return;
+	key_B = (sm2_ec_key*)OPENSSL_malloc(sizeof(sm2_ec_key));
+
+    //initial listen port
+    if((listenfd = socket(AF_INET,SOCK_STREAM,0))==-1)
+	{
+		printf("create socket error\n");
+		return;
+	}
+    memset(&listenaddr,0,sizeof(listenaddr));
+	listenaddr.sin_family = AF_INET;
+	listenaddr.sin_addr.s_addr = INADDR_ANY;
+	listenaddr.sin_port = htons(LISTENPORT);
+
+	if(bind(listenfd,(struct sockaddr*)&listenaddr,sizeof(listenaddr))==-1)
+	{
+		printf("bind socket error\n");
+		return;
+	}
+
+	if(listen(listenfd,10)==-1)
+	{
+		printf("listen socket error\n");
+		return;
+	}
+
+    //initial two send port
+    if((sendInfd = socket(AF_INET,SOCK_STREAM,0))==-1)
+	{
+		printf("create socket error\n");
+		return;
+	}
+    
+    memset(&sendaddr,0,sizeof(sendaddr));
+	sendaddr.sin_family=AF_INET;
+	sendaddr.sin_port=htons(SENDPORT);
+
+    if(inet_pton(AF_INET,INIP,&sendaddr.sin_addr)<=0)
+	{
+		printf("inet_pton error\n");
+		return;
+	}
+
+	if(connect(sendInfd,(struct sockaddr*)&sendaddr,sizeof(sendaddr))<0)
+	{
+		printf("connect Interface error\n");
+		return;
+	}
+
+    if((sendBfd = socket(AF_INET,SOCK_STREAM,0))==-1)
+	{
+		printf("create socket error\n");
+		return;
+	}
+    
+    memset(&sendaddr,0,sizeof(sendaddr));
+	sendaddr.sin_family=AF_INET;
+	sendaddr.sin_port=htons(SENDPORT);
+
+    if(inet_pton(AF_INET,BIP,&sendaddr.sin_addr)<=0)
+	{
+		printf("inet_pton error\n");
+		return;
+	}
+
+	if(connect(sendBfd,(struct sockaddr*)&sendaddr,sizeof(sendaddr))<0)
+	{
+		printf("connect B error\n");
+		return;
+	}
+    
+	while(1)
+	{
+		switch (state)
+		{
+		case 0: // receive private_A and generate public
+			if((connfd=accept(listenfd,(struct sockaddr *)NULL,NULL))==-1)
+			{
+				printf("accept private_A error\n");
+				state = 10;
+				break;
+			}
+			revlength = recv(connfd,buff,MAXLINE,0);
+			buff[revlength] = '\0';
+			private_A = buff;
+			state = 1;
+			memset(buff,0,MAXLINE);
+			close(connfd);
+			break;
+		case 1: // recieve plaintext
+			if((connfd=accept(listenfd,(struct sockaddr *)NULL,NULL))==-1)
+			{
+				printf("accept plaintext error\n");
+				state = 10;
+				break;
+			}
+			revlength = recv(connfd,buff,MAXLINE,0);
+			buff[revlength] = '\0';
+			plaintext = buff;
+			state = 2;
+			memset(buff,0,MAXLINE);
+			close(connfd);
+			break;
+		case 2: //send public_A
+			gen_pub_from_pri_A(private_A,&public_A_x,&public_A_y,key_A,ecp);
+			if (send(sendBfd,public_A_x.c_str(),public_A_x.length(),0)<0)
+			{
+				printf("send public_A_x error\n");
+				state = 10;
+				break;
+			}
+			if (send(sendBfd,public_A_y.c_str(),public_A_y.length(),0)<0)
+			{
+				printf("send public_A_y error\n");
+				state = 10;
+				break;
+			}
+			state = 3;
+			break;
+		case 3: // receive public_B_x
+			if((connfd=accept(listenfd,(struct sockaddr *)NULL,NULL))==-1)
+			{
+				printf("accept public_B error\n");
+				state = 10;
+				break;
+			}
+			revlength = recv(connfd,buff,MAXLINE,0);
+			buff[revlength] = '\0';
+			public_B_x = buff;
+			state = 3;
+			memset(buff,0,MAXLINE);
+			close(connfd);
+			break;
+		case 4://recieve public_B_y
+			if((connfd=accept(listenfd,(struct sockaddr *)NULL,NULL))==-1)
+			{
+				printf("accept public_B error\n");
+				state = 10;
+				break;
+			}
+			revlength = recv(connfd,buff,MAXLINE,0);
+			buff[revlength] = '\0';
+			public_B_y = buff;
+			state = 4;
+			memset(buff,0,MAXLINE);
+			close(connfd);
+			break;
+		case 5: // signencryption and send time to Interface
+			key_B->P = xy_ecpoint_new(ecp);
+			BN_hex2bn(&key_B->P->x,public_B_x.c_str());
+			BN_hex2bn(&key_B->P->y,public_B_y.c_str());
+			signcryption(plaintext,&flag_signcryption,&ciphertext,&time_signcrytion,key_A,key_B,ecp);
+			temp = to_string(time_signcrytion);
+			if (send(sendInfd,temp.c_str(),temp.length(),0)<0)
+			{
+				printf("send time error\n");
+				state = 10;
+				break;
+			}
+			state = 6;
+			break;
+		case 6: //wait signal and send ciphertext
+			if((connfd=accept(listenfd,(struct sockaddr *)NULL,NULL))==-1)
+			{
+				printf("accept signal error\n");
+				state = 10;
+				break;
+			}
+			revlength = recv(connfd,buff,MAXLINE,0);
+			buff[revlength] = '\0';
+			close(connfd);
+			if (send(sendBfd,ciphertext.c_str(),ciphertext.length(),0)<0)
+			{
+				printf("send ciphertext error\n");
+				state = 10;
+				break;
+			}
+			state = 10;
+			break;
+		case 10: //error
+			break;
+		default:
+			break;
+		}
+		if (state==10)
+			break;
+	}
+
+	sm2_ec_key_free(key_B);
+	ec_param_free(ecp);
+	sm2_ec_key_free(key_A);
+	close(sendBfd);
+	close(sendInfd);
+	close(listenfd);
+	return;
 }

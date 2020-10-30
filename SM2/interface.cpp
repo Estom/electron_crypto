@@ -15,6 +15,77 @@ int main()
 	string timestamp;
     int state = 0;
 
+    int sendAfd,sendBfd,listenfd,connfd;
+    struct sockaddr_in sendaddr,listenaddr;
+
+    //initial listen port
+    if((listenfd = socket(AF_INET,SOCK_STREAM,0))==-1)
+	{
+		printf("create socket error\n");
+		return;
+	}
+    memset(&listenaddr,0,sizeof(listenaddr));
+	listenaddr.sin_family = AF_INET;
+	listenaddr.sin_addr.s_addr = INADDR_ANY;
+	listenaddr.sin_port = htons(LISTENPORT);
+
+	if(bind(listenfd,(struct sockaddr*)&listenaddr,sizeof(listenaddr))==-1)
+	{
+		printf("bind socket error\n");
+		return;
+	}
+
+	if(listen(listenfd,10)==-1)
+	{
+		printf("listen socket error\n");
+		return;
+	}
+
+    //initial two send port
+    if((sendAfd = socket(AF_INET,SOCK_STREAM,0))==-1)
+	{
+		printf("create socket error\n");
+		return;
+	}
+    
+    memset(&sendaddr,0,sizeof(sendaddr));
+	sendaddr.sin_family=AF_INET;
+	sendaddr.sin_port=htons(SENDPORT);
+
+    if(inet_pton(AF_INET,AIP,&sendaddr.sin_addr)<=0)
+	{
+		printf("inet_pton error\n");
+		return;
+	}
+
+	if(connect(sendAfd,(struct sockaddr*)&sendaddr,sizeof(sendaddr))<0)
+	{
+		printf("connect Interface error\n");
+		return;
+	}
+
+    if((sendBfd = socket(AF_INET,SOCK_STREAM,0))==-1)
+	{
+		printf("create socket error\n");
+		return;
+	}
+    
+    memset(&sendaddr,0,sizeof(sendaddr));
+	sendaddr.sin_family=AF_INET;
+	sendaddr.sin_port=htons(SENDPORT);
+
+    if(inet_pton(AF_INET,BIP,&sendaddr.sin_addr)<=0)
+	{
+		printf("inet_pton error\n");
+		return;
+	}
+
+	if(connect(sendBfd,(struct sockaddr*)&sendaddr,sizeof(sendaddr))<0)
+	{
+		printf("connect B error\n");
+		return;
+	}
+
     while(1)
     {
         switch (state)

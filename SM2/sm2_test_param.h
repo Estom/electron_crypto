@@ -34,9 +34,9 @@ extern char* message_digest;
 extern char* ID_A;
 extern char* ID_B;
 
-extern ec_param* ecp;
-extern ec_param* ecp2;
-extern sm2_ec_key* key_A;
-extern sm2_ec_key* key_B;
+//extern ec_param* ecp;
+//extern ec_param* ecp2;
+//extern sm2_ec_key* key_A;
+//extern sm2_ec_key* key_B;
 
 #endif
