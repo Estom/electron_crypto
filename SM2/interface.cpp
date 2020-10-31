@@ -15,6 +15,7 @@ void main_function()
     //receive
     string time_signcrytion;
     string time_unsigncrytion;
+    bool flag_unsigncrytion;
 	bool flag_replay_attack;
 	bool flag_tamper_attack;
 	string timestamp;
@@ -91,40 +92,12 @@ void main_function()
 		return;
 	}
 
-    while(1)
-    {
-        switch (state)
-        {
-        case 0:
-            send_private_A(sendAfd,private_A);
-            state = 1;
-            break;
-        case 1:
-            send_plaintext(sendAfd,plaintext);
-            state=2;
-            break;
-        case 2:
-            send_private_B(sendBfd,private_B);
-            state=3;
-            break;
-        case 3:
-            re_A_signtime(listenfd,&time_signcrytion);
-            state = 4;
-            break;
-        case 4:
-            send_signal_A(sendAfd);
-            state = 5;
-            break;
-        case 5:
-            re_B_unsigntime(listenfd,&time_unsigncrytion);
-            state = 6;
-            break;
-        default:
-            break;
-        }
-        if (state==6)
-            break;
-    }
+    send_private_A(sendAfd,private_A);      
+    send_plaintext(sendAfd,plaintext);      
+    send_private_B(sendBfd,private_B);          
+    re_A_signtime(listenfd,&time_signcrytion);           
+    send_signal_A(sendAfd);    
+    re_B_unsigntime(listenfd,&time_unsigncrytion);
     return;
 }
 void send_private_A(int sendfd,string private_A)
@@ -147,7 +120,7 @@ void re_A_signtime(int listenfd,string *time_signcrytion)
     rev_unit(listenfd,time_signcrytion);
     return;
 }
-void re_B_unsigntime(int listenfd,string *time_unsigncrytion)
+void re_B_timeFlag(int listenfd,string *time_unsigncrytion)
 {
     rev_unit(listenfd,time_unsigncrytion);
     return;

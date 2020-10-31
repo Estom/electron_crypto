@@ -16,7 +16,7 @@ void send_plaintext(int sendfd,string plaintext);
 
 
 void re_A_signtime(int listenfd,string *time_signcrytion);
-void re_B_unsigntime(int listenfd,string *time_unsigncrytion);
+void re_B_timeFlag(int listenfd,string *time_unsigncrytion);
 
 //signal A to send cipher
 void send_signal_A(int sendfd);

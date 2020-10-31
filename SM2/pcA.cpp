@@ -103,7 +103,7 @@ void main_function()
 	{
 		switch (state)
 		{
-		case 0: // receive private_A and generate public
+		case 0: // receive private_A
 			if((connfd=accept(listenfd,(struct sockaddr *)NULL,NULL))==-1)
 			{
 				printf("accept private_A error\n");
@@ -131,7 +131,7 @@ void main_function()
 			memset(buff,0,MAXLINE);
 			close(connfd);
 			break;
-		case 2: //send public_A
+		case 2: //generate public and send public_A
 			gen_pub_from_pri_A(private_A,&public_A_x,&public_A_y,key_A,ecp);
 			if (send(sendBfd,public_A_x.c_str(),public_A_x.length(),0)<0)
 			{
