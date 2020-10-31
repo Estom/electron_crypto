@@ -63,5 +63,7 @@ void gen_pub_from_pri_B(string private_key_str,string *public_B_x,string *public
 //socket communication
 void send_msg(string msg,char* ip_add,int port);
 void recv_msg(string *msg,int port);
+void send_unit(int sendfd,string msg);
+void rev_unit(int listenfd,string *msg);
 
 #endif

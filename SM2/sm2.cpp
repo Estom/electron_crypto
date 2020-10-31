@@ -531,3 +531,24 @@ void recv_msg(string *msg,int port)
 	*msg = buff;
 	return;
 }
+void send_unit(int sendfd,string msg)
+{
+	if (send(sendfd,msg.c_str(),msg.length(),0)<0)
+	{
+		printf("send msg error\n");
+	}
+	return;
+}
+void rev_unit(int listenfd,string *msg)
+{
+	char buff[MAXLINE];
+	int connfd,len;
+	if((connfd=accept(listenfd,(struct sockaddr *)NULL,NULL))==-1)
+	{
+		printf("accept msg error\n");
+	}
+	len = recv(connfd,buff,MAXLINE,0);
+	buff[len]='\0';
+	*msg = buff;
+	return;
+}

@@ -1,6 +1,11 @@
+//interface main function
 #include"interface.h"
-
 int main()
+{
+    main_function();
+    return 0;
+}
+void main_function()
 {
     //send
     string private_A;
@@ -91,27 +96,27 @@ int main()
         switch (state)
         {
         case 0:
-            send_private_A(private_A);
+            send_private_A(sendAfd,private_A);
             state = 1;
             break;
         case 1:
-            send_plaintext(plaintext);
+            send_plaintext(sendAfd,plaintext);
             state=2;
             break;
         case 2:
-            send_private_B(private_B);
+            send_private_B(sendBfd,private_B);
             state=3;
             break;
         case 3:
-            re_A_signtime(&time_signcrytion);
+            re_A_signtime(listenfd,&time_signcrytion);
             state = 4;
             break;
         case 4:
-            send_signal_A();
+            send_signal_A(sendAfd);
             state = 5;
             break;
         case 5:
-            re_B_unsigntime(&time_unsigncrytion);
+            re_B_unsigntime(listenfd,&time_unsigncrytion);
             state = 6;
             break;
         default:
@@ -120,33 +125,37 @@ int main()
         if (state==6)
             break;
     }
-    return 0;
+    return;
 }
-void send_private_A(string private_A)
+void send_private_A(int sendfd,string private_A)
 {
-    send_msg(private_A,AIP,SENDPORT);
+    send_unit(sendfd,private_A);
+    return;
 }
-void send_private_B(string private_B)
+void send_private_B(int sendfd,string private_B)
 {
-    send_msg(private_B,BIP,SENDPORT);
+    send_unit(sendfd,private_B);
+    return;
 }
-void send_plaintext(string plaintext)
+void send_plaintext(int sendfd,string plaintext)
 {
-    send_msg(plaintext,AIP,SENDPORT);
+    send_unit(sendfd,plaintext);
+    return;
 }
-
-void re_A_signtime(string *time_signcrytion)
+void re_A_signtime(int listenfd,string *time_signcrytion)
 {
-    recv_msg(time_signcrytion,LISTENPORT);
+    rev_unit(listenfd,time_signcrytion);
+    return;
 }
-void re_B_unsigntime(string *time_unsigncrytion)
+void re_B_unsigntime(int listenfd,string *time_unsigncrytion)
 {
-    recv_msg(time_unsigncrytion,LISTENPORT);
+    rev_unit(listenfd,time_unsigncrytion);
+    return;
 }
-
-//signal A to send cipher
-void send_signal_A()
+void send_signal_A(int sendfd)
 {
-    send_msg("send",AIP,SENDPORT);
+    string signal = "send";
+    send_unit(sendfd,signal);
+    return;
 }
 
