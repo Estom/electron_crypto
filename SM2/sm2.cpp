@@ -105,7 +105,7 @@ void main_1()
 	return;
 }
 void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, double* time_signcrytion,\
-		sm2_ec_key* key_A,sm2_ec_key* key_B,ec_param* ecp)
+		sm2_ec_key* key_A,BIGNUM *b_x,BIGNUM *b_y,ec_param* ecp)
 {
 	int state = 0;//状态变量，代表状态
 	struct timeval start;
@@ -138,11 +138,10 @@ void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, 
 			message_data.message_byte_length = strlen((char*)message_data.message);
 			message_data.klen_bit = message_data.message_byte_length * 8;
 			sm2_hex2bin((BYTE*)sm2_param_k[ecp->type], message_data.k, ecp->point_byte_length);
-			sm2_bn2bin(key_B->P->x, message_data.public_key.x, ecp->point_byte_length);
-			sm2_bn2bin(key_B->P->y, message_data.public_key.y, ecp->point_byte_length);
+			sm2_bn2bin(b_x, message_data.public_key.x, ecp->point_byte_length);
+			sm2_bn2bin(b_y, message_data.public_key.y, ecp->point_byte_length);
 
 			/* enc-dec init end*/
-
 			pos = sm2_encrypt_copy(ecp, &message_data);
 			state = 1;
 			break;
@@ -186,6 +185,7 @@ void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, 
 	BUFFER_APPEND_STRING(message_data.C, pos, ecp->point_byte_length, sign.r);
 	BUFFER_APPEND_STRING(message_data.C, pos, ecp->point_byte_length, sign.s);
 
+	printf("6\n");
 	charArray2hex(message_data.C, pos, ciphertext);
 	struct timeval end;
 	gettimeofday(&end,0);
@@ -443,7 +443,6 @@ void gen_pub_from_pri_A(string private_key_str,string *public_A_x,string *public
 void send_msg(string msg,char* ip_add,int port)
 {
 	int sockfd,n;
-	char recvline[MAXLINE],sendline[MAXLINE];
 	struct sockaddr_in servaddr;
 
 	if ((sockfd=socket(AF_INET,SOCK_STREAM,0))<0)
@@ -467,8 +466,6 @@ void send_msg(string msg,char* ip_add,int port)
 		return;
 	}
 
-	printf("send msg to server\n");
-	printf("%s\n",msg.c_str());
 	if (send(sockfd,msg.c_str(),msg.length(),0)<0)
 	{
 		printf("send error\n");

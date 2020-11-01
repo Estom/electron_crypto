@@ -36,6 +36,7 @@ using namespace std;
 #define DELAY_TIME 20000 //ms
 #define PLAIN_LEN 150//明文长度
 #define MAXLINE 2000
+#define SENDDELAY 5000
 
 void main_1();//带接口的签密和解签密函数
 void charArray2hex(BYTE * C,int length,string *ciphertext);
@@ -43,7 +44,7 @@ void charArray2hex(BYTE * C,int length,string *ciphertext);
 void hex2charArray(BYTE* C, string ciphertext);
 
 void signcryption(string plaintext,bool *flag_signcrytion,string *ciphertext,double *time_signcrytion,\
-    sm2_ec_key* key_A,sm2_ec_key* key_B,ec_param* ecp);//签密函数
+    sm2_ec_key* key_A,BIGNUM *b_x,BIGNUM *b_y,ec_param* ecp);//签密函数
 
 void unsigncryption(string ciphertext, bool* flag_unsigncryption, string* plaintext,  \
     sm2_ec_key* key_B,sm2_ec_key* key_A,ec_param* ecp2,\

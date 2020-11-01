@@ -22,8 +22,8 @@ void main_function()
     int state = 0;
 
     //int sendAfd,sendBfd,listenfd,connfd;
-	int sendAfd,sendBfd,listenAfd,listenBfd,connfd;
-    struct sockaddr_in sendaddr,listenaddr;
+	int listenAfd,listenBfd;
+    struct sockaddr_in listenaddr;
 
     //initial listen port
     if((listenAfd = socket(AF_INET,SOCK_STREAM,0))==-1)
@@ -69,79 +69,39 @@ void main_function()
 		return;
 	}
 
-    //initial two send port
-    if((sendAfd = socket(AF_INET,SOCK_STREAM,0))==-1)
-	{
-		printf("create socket error\n");
-		return;
-	}
-    
-    memset(&sendaddr,0,sizeof(sendaddr));
-	sendaddr.sin_family=AF_INET;
-	sendaddr.sin_port=htons(SENDAPORT);
-
-    if(inet_pton(AF_INET,AIP,&sendaddr.sin_addr)<=0)
-	{
-		printf("inet_pton error\n");
-		return;
-	}
-
-	if(connect(sendAfd,(struct sockaddr*)&sendaddr,sizeof(sendaddr))<0)
-	{
-		printf("connect Interface error\n");
-		return;
-	}
-
-    if((sendBfd = socket(AF_INET,SOCK_STREAM,0))==-1)
-	{
-		printf("create socket error\n");
-		return;
-	}
-    
-    memset(&sendaddr,0,sizeof(sendaddr));
-	sendaddr.sin_family=AF_INET;
-	sendaddr.sin_port=htons(SENDBPORT);
-
-    if(inet_pton(AF_INET,BIP,&sendaddr.sin_addr)<=0)
-	{
-		printf("inet_pton error\n");
-		return;
-	}
-
-	if(connect(sendBfd,(struct sockaddr*)&sendaddr,sizeof(sendaddr))<0)
-	{
-		printf("connect B error\n");
-		return;
-	}
-
-    send_private_A(sendAfd,private_A);      
-    send_plaintext(sendAfd,plaintext);      
-    send_private_B(sendBfd,private_B);          
+    send_private_A(private_A);
+    send_private_B(private_B);
+	getchar();
+	send_plaintext(plaintext);
     re_A_signtime(listenAfd,&time_signcrytion);           
-    send_signal_A(sendAfd);
+    send_signal_A();
     re_B_timeFlag(listenBfd,&time_unsigncrytion,\
 				&flag_unsigncrytion,\
 				&flag_replay_attack,\
 				&flag_tamper_attack);
+	cout << time_signcrytion << endl;
 	cout << flag_unsigncrytion << endl;
 	cout << flag_replay_attack << endl;
 	cout << flag_tamper_attack << endl;
 	cout << time_unsigncrytion << endl;
+
+	close(listenBfd);
+	close(listenAfd);
     return;
 }
-void send_private_A(int sendfd,string private_A)
+void send_private_A(string private_A)
 {
-    send_unit(sendfd,private_A);
+    send_msg(private_A,AIP,SENDAPORT);
     return;
 }
-void send_private_B(int sendfd,string private_B)
+void send_private_B(string private_B)
 {
-    send_unit(sendfd,private_B);
+    send_msg(private_B,BIP,SENDBPORT);
     return;
 }
-void send_plaintext(int sendfd,string plaintext)
+void send_plaintext(string plaintext)
 {
-    send_unit(sendfd,plaintext);
+    send_msg(plaintext,AIP,SENDAPORT);
     return;
 }
 void re_A_signtime(int listenfd,string *time_signcrytion)
@@ -164,10 +124,10 @@ void re_B_timeFlag(int listenfd,string *time_unsigncrytion,\
 	*time_unsigncrytion = temp.substr(0,len-3);
     return;
 }
-void send_signal_A(int sendfd)
+void send_signal_A()
 {
     string signal = "send";
-    send_unit(sendfd,signal);
+    send_msg(signal,AIP,SENDAPORT);
     return;
 }
 bool string2bool(char flag)
