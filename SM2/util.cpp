@@ -112,7 +112,6 @@ int sm2_bn2bin(BIGNUM* bn, BYTE* bin_string, int point_byte_length)
 		return FAIL;
 	if (point_byte_length > MAX_POINT_BYTE_LENGTH)
 		return FAIL;
-
 	len = point_byte_length - BN_num_bytes(bn);
 	if (len > MAX_POINT_BYTE_LENGTH)
 	{

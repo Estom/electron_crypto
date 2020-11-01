@@ -20,14 +20,10 @@ void main_function()
 	bool flag_tamper_attack = false;
     string timestamp;
 
-    sm2_ec_key* key_A = NULL;
-    sm2_ec_key* key_B = NULL;
-	ec_param* ecp2;
 
     int listenAfd,listenInfd,connfd;
     struct sockaddr_in listenaddr;
 
-    key_B = (sm2_ec_key*)OPENSSL_malloc(sizeof(sm2_ec_key));
 
     //initial listen port
     if((listenAfd = socket(AF_INET,SOCK_STREAM,0))==-1)
@@ -79,21 +75,18 @@ void main_function()
     cout <<private_B <<endl;
     rev_publicA_x(listenAfd,&public_A_x);
     rev_publicA_y(listenAfd,&public_A_y);
-	gen_pub_from_pri_B(private_B,&public_B_x,&public_B_y,key_B,ecp2);
+	gen_pub_from_pri_B(private_B,&public_B_x,&public_B_y);
     send_publicB(public_B_x,public_B_y);
     rev_ciphertext(listenAfd,&ciphertext);
+	cout<<ciphertext<<" "<<ciphertext.length()<<endl;
 
-	cout<< "11111"<<endl;
-	key_A = (sm2_ec_key*)OPENSSL_malloc(sizeof(sm2_ec_key));
-	cout<< "22222"<<endl;
-    key_A->P = xy_ecpoint_new(ecp2);
-	cout<< "3333"<<endl;
+	key_A = sm2_ec_key_new(ecp2);
 	BN_hex2bn(&key_A->P->x,public_A_x.c_str());
-	cout<< "4444"<<endl;
 	BN_hex2bn(&key_A->P->y,public_A_y.c_str());
-	cout<< "5555"<<endl;
-    unsigncryption(ciphertext,&flag_unsigncrytion,&plaintext,key_B,key_A,\
-                    ecp2,&time_unsigncrytion,&flag_replay_attack,\
+	show_bignum(key_A->P->x,ecp2->point_byte_length);
+	cout << public_A_x<<endl;
+	cout << public_A_y<<endl;
+    unsigncryption(ciphertext,&flag_unsigncrytion,&plaintext,&time_unsigncrytion,&flag_replay_attack,\
                     &flag_tamper_attack,&timestamp);
     cout << plaintext <<endl;
     send_timeFlag(time_unsigncrytion,\

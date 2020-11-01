@@ -104,8 +104,7 @@ void main_1()
 
 	return;
 }
-void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, double* time_signcrytion,\
-		sm2_ec_key* key_A,BIGNUM *b_x,BIGNUM *b_y,ec_param* ecp)
+void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, double* time_signcrytion)
 {
 	int state = 0;//状态变量，代表状态
 	struct timeval start;
@@ -124,7 +123,6 @@ void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, 
 
 	r = BN_new();
 	s = BN_new();
-
 	while (true) {
 		switch (state)
 		{
@@ -138,8 +136,8 @@ void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, 
 			message_data.message_byte_length = strlen((char*)message_data.message);
 			message_data.klen_bit = message_data.message_byte_length * 8;
 			sm2_hex2bin((BYTE*)sm2_param_k[ecp->type], message_data.k, ecp->point_byte_length);
-			sm2_bn2bin(b_x, message_data.public_key.x, ecp->point_byte_length);
-			sm2_bn2bin(b_y, message_data.public_key.y, ecp->point_byte_length);
+			sm2_bn2bin(key_B->P->x, message_data.public_key.x, ecp->point_byte_length);
+			sm2_bn2bin(key_B->P->y, message_data.public_key.y, ecp->point_byte_length);
 
 			/* enc-dec init end*/
 			pos = sm2_encrypt_copy(ecp, &message_data);
@@ -185,15 +183,14 @@ void signcryption(string plaintext, bool* flag_signcrytion, string* ciphertext, 
 	BUFFER_APPEND_STRING(message_data.C, pos, ecp->point_byte_length, sign.r);
 	BUFFER_APPEND_STRING(message_data.C, pos, ecp->point_byte_length, sign.s);
 
-	printf("6\n");
 	charArray2hex(message_data.C, pos, ciphertext);
 	struct timeval end;
 	gettimeofday(&end,0);
 	*time_signcrytion = (double)((end.tv_sec-start.tv_sec)*1000000+(end.tv_usec-start.tv_usec));
 	return;
 }
+
 void unsigncryption(string ciphertext, bool* flag_unsigncrytion, string* plaintext, \
-	sm2_ec_key* key_B,sm2_ec_key* key_A,ec_param* ecp2, \
 	double* time_unsigncrytion, bool* flag_replay_attack, bool* flag_tamper_attack, string* timestamp)
 {
 	*flag_replay_attack = false;
@@ -255,6 +252,7 @@ void unsigncryption(string ciphertext, bool* flag_unsigncrytion, string* plainte
 	pos2 = pos2 + pos1;
 	
 	//sign初始化
+	printf("10\n");
 	sm2_hex2bin((BYTE*)sm2_param_digest_k[ecp2->type], sign.k, ecp2->point_byte_length);
 	//sm2_bn2bin(key_A->d, sign.private_key, ecp2->point_byte_length); //解签密过程不需要私钥
 	sm2_bn2bin(key_A->P->x, sign.public_key.x, ecp2->point_byte_length);//A的公钥
@@ -421,7 +419,7 @@ void replay_attack(string intercepted_ciphertext, bool* flag_do_replay, string* 
 	return;
 }
 
-void gen_pub_from_pri_B(string private_key_str,string *public_B_x,string *public_B_y,sm2_ec_key* key_B,ec_param *ecp2)
+void gen_pub_from_pri_B(string private_key_str,string *public_B_x,string *public_B_y)
 {
 	ecp2 = ec_param_new();
 	ec_param_init(ecp2, SM2_PARAM_IN, TYPE_IN, POINT_BIT_LENGTH_IN);
@@ -430,10 +428,11 @@ void gen_pub_from_pri_B(string private_key_str,string *public_B_x,string *public
 	*public_B_x = BN_bn2hex(key_B->P->x);
 	*public_B_y = BN_bn2hex(key_B->P->y);
 }
-void gen_pub_from_pri_A(string private_key_str,string *public_A_x,string *public_A_y,sm2_ec_key* key_A,ec_param* ecp)
+void gen_pub_from_pri_A(string private_key_str,string *public_A_x,string *public_A_y)
 {
 	ecp = ec_param_new();
 	ec_param_init(ecp, SM2_PARAM_IN, TYPE_IN, POINT_BIT_LENGTH_IN);
+	printf("%d\n",ecp->type);
 	key_A = sm2_ec_key_new(ecp);
 	sm2_ec_key_init(key_A, (char*)private_key_str.c_str(), ecp);
 	*public_A_x = BN_bn2hex(key_A->P->x);

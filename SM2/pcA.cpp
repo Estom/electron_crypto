@@ -1,11 +1,5 @@
 #include"pcA.h"
 
-sm2_ec_key* key_A = NULL;
-sm2_ec_key* key_B = NULL;
-BIGNUM *b_x = BN_new();
-BIGNUM *b_y = BN_new();
-ec_param* ecp;
-
 int main()
 {
 	main_function();
@@ -13,8 +7,8 @@ int main()
 }
 void main_function()
 {
-    string private_A;
-    string plaintext;
+    string private_A="128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263";
+    string plaintext="hello";
     string ciphertext;
     double time_signcrytion;
 	bool flag_signcryption;
@@ -81,24 +75,22 @@ void main_function()
 	rev_plaintext(listenInfd,&plaintext);
 	cout<< plaintext <<endl;
 			
-	gen_pub_from_pri_A(private_A,&public_A_x,&public_A_y,key_A,ecp);
+	gen_pub_from_pri_A(private_A,&public_A_x,&public_A_y);
 	send_publicA(public_A_x,public_A_y);
 	rev_public_B_x(listenBfd,&public_B_x);
 	rev_public_B_y(listenBfd,&public_B_y);
 
-	/*cout << "1"<<endl;
-	key_B = (sm2_ec_key*)OPENSSL_malloc(sizeof(sm2_ec_key));
 	key_B = sm2_ec_key_new(ecp);
-	cout << "2"<<endl;
-	key_B->P = xy_ecpoint_new(ecp);
-	cout << "3"<<endl;*/
-	BN_hex2bn(&b_x,public_B_x.c_str());
-	BN_hex2bn(&b_y,public_B_y.c_str());
-	signcryption(plaintext,&flag_signcryption,&ciphertext,&time_signcrytion,key_A,b_x,b_y,ecp);
+	
+	BN_hex2bn(&key_B->P->x,public_B_x.c_str());
+	BN_hex2bn(&key_B->P->y,public_B_y.c_str());
+	show_bignum(key_B->P->x,ecp->point_byte_length);
+	signcryption(plaintext,&flag_signcryption,&ciphertext,&time_signcrytion);
 	
 	send_signtime(time_signcrytion);
 	rev_signal(listenInfd);
 	send_ciphertext(ciphertext);
+	cout<<ciphertext << " "<< ciphertext.length() << endl;
 
 	sm2_ec_key_free(key_B);
 	ec_param_free(ecp);
