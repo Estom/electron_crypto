@@ -8,12 +8,6 @@
 #pragma comment(lib,"libcrypto.lib")
 #include "part5.h"
 
-int main()
-{
-	main_1();
-	return 0;
-}
-
 //随机产生明文
 void gen_plaintext(int length, string* plaintext)
 {
@@ -251,7 +245,7 @@ void unsigncryption(string ciphertext, bool* flag_unsigncrytion, string* plainte
 
 	int pos1 = 0;
 	int pos2 = 0;
-	BUFFER_APPEND_STRING(message_data.C_1, pos1, 1 + ecp->point_byte_length + ecp->point_byte_length, &message_data.C[pos2]);
+	BUFFER_APPEND_STRING(message_data.C_1, pos1, 1 + ecp2->point_byte_length + ecp2->point_byte_length, &message_data.C[pos2]);
 	pos2 = pos2 + pos1;
 	pos1 = 0;
 	BUFFER_APPEND_STRING(message_data.C_2, pos1, message_data.message_byte_length, &message_data.C[pos2]);
@@ -263,10 +257,10 @@ void unsigncryption(string ciphertext, bool* flag_unsigncrytion, string* plainte
 	//sign初始化
 	sm2_hex2bin((BYTE*)sm2_param_digest_k[ecp2->type], sign.k, ecp2->point_byte_length);
 	//sm2_bn2bin(key_A->d, sign.private_key, ecp2->point_byte_length); //解签密过程不需要私钥
-	sm2_bn2bin(key_A->P->x, sign.public_key.x, ecp->point_byte_length);//A的公钥
-	sm2_bn2bin(key_A->P->y, sign.public_key.y, ecp->point_byte_length);
-	memcpy(sign.r, &message_data.C[C_length - 2 * ecp->point_byte_length], ecp->point_byte_length);
-	memcpy(sign.s, &message_data.C[C_length - ecp->point_byte_length], ecp->point_byte_length);
+	sm2_bn2bin(key_A->P->x, sign.public_key.x, ecp2->point_byte_length);//A的公钥
+	sm2_bn2bin(key_A->P->y, sign.public_key.y, ecp2->point_byte_length);
+	memcpy(sign.r, &message_data.C[C_length - 2 * ecp2->point_byte_length], ecp2->point_byte_length);
+	memcpy(sign.s, &message_data.C[C_length - ecp2->point_byte_length], ecp2->point_byte_length);
 
 	//验证签名和解密
 	sm2_verify_modified(ecp2, &sign, &message_data,flag_tamper_attack);
@@ -276,7 +270,7 @@ void unsigncryption(string ciphertext, bool* flag_unsigncrytion, string* plainte
 		OPENSSL_free(message_data.decrypt);
 		return;
 	}
-	sm2_decrypt_copy(ecp, &message_data,flag_replay_attack,flag_tamper_attack);
+	sm2_decrypt_copy(ecp2, &message_data,flag_replay_attack,flag_tamper_attack);
 	if (*flag_tamper_attack == true || *flag_replay_attack == true)
 	{
 		*flag_unsigncrytion = false;

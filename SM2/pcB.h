@@ -1,7 +1,9 @@
 #include"part5.h"
 
-#define SENDPORT 6666
-#define LISTENPORT 6667
+#define SENDAPORT 6669
+#define LISTENAPORT 6668
+#define SENDINPORT 6670
+#define LISTENINPORT 6671
 #define AIP "127.0.0.1"
 #define INIP "127.0.0.1"
 

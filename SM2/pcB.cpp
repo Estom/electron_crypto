@@ -2,6 +2,7 @@
 
 int main()
 {
+    main_function();
     return 0;
 }
 void main_function()
@@ -23,13 +24,13 @@ void main_function()
     sm2_ec_key* key_B = NULL;
 	ec_param* ecp2;
 
-    int listenfd,sendAfd,sendInfd,connfd;
+    int listenAfd,listenInfd,sendAfd,sendInfd,connfd;
     struct sockaddr_in sendaddr,listenaddr;
 
     key_B = (sm2_ec_key*)OPENSSL_malloc(sizeof(sm2_ec_key));
 
     //initial listen port
-    if((listenfd = socket(AF_INET,SOCK_STREAM,0))==-1)
+    if((listenAfd = socket(AF_INET,SOCK_STREAM,0))==-1)
 	{
 		printf("create socket error\n");
 		return;
@@ -37,19 +38,47 @@ void main_function()
     memset(&listenaddr,0,sizeof(listenaddr));
 	listenaddr.sin_family = AF_INET;
 	listenaddr.sin_addr.s_addr = INADDR_ANY;
-	listenaddr.sin_port = htons(LISTENPORT);
+	listenaddr.sin_port = htons(LISTENAPORT);
 
-	if(bind(listenfd,(struct sockaddr*)&listenaddr,sizeof(listenaddr))==-1)
+	if(bind(listenAfd,(struct sockaddr*)&listenaddr,sizeof(listenaddr))==-1)
 	{
 		printf("bind socket error\n");
 		return;
 	}
 
-	if(listen(listenfd,10)==-1)
+	if(listen(listenAfd,10)==-1)
 	{
 		printf("listen socket error\n");
 		return;
 	}
+
+     if((listenInfd = socket(AF_INET,SOCK_STREAM,0))==-1)
+	{
+		printf("create socket error\n");
+		return;
+	}
+    memset(&listenaddr,0,sizeof(listenaddr));
+	listenaddr.sin_family = AF_INET;
+	listenaddr.sin_addr.s_addr = INADDR_ANY;
+	listenaddr.sin_port = htons(LISTENINPORT);
+
+	if(bind(listenInfd,(struct sockaddr*)&listenaddr,sizeof(listenaddr))==-1)
+	{
+		printf("bind socket error\n");
+		return;
+	}
+
+	if(listen(listenInfd,10)==-1)
+	{
+		printf("listen socket error\n");
+		return;
+	}
+
+
+    rev_privateB(listenInfd,&private_B);
+    cout <<private_B <<endl;
+    rev_publicA_x(listenAfd,&public_A_x);
+    rev_publicA_y(listenAfd,&public_A_y);
 
     //initial two send port
     if((sendInfd = socket(AF_INET,SOCK_STREAM,0))==-1)
@@ -60,7 +89,7 @@ void main_function()
     
     memset(&sendaddr,0,sizeof(sendaddr));
 	sendaddr.sin_family=AF_INET;
-	sendaddr.sin_port=htons(SENDPORT);
+	sendaddr.sin_port=htons(SENDINPORT);
 
     if(inet_pton(AF_INET,INIP,&sendaddr.sin_addr)<=0)
 	{
@@ -82,7 +111,7 @@ void main_function()
     
     memset(&sendaddr,0,sizeof(sendaddr));
 	sendaddr.sin_family=AF_INET;
-	sendaddr.sin_port=htons(SENDPORT);
+	sendaddr.sin_port=htons(SENDAPORT);
 
     if(inet_pton(AF_INET,AIP,&sendaddr.sin_addr)<=0)
 	{
@@ -95,22 +124,29 @@ void main_function()
 		printf("connect A error\n");
 		return;
 	}
+    cout << "listen port initial done!"<<endl;
 
-    rev_privateB(listenfd,&private_B);
-    rev_publicA_x(listenfd,&public_A_x);
-    rev_publicA_y(listenfd,&public_A_y);
     key_A->P = xy_ecpoint_new(ecp2);
 	BN_hex2bn(&key_A->P->x,public_A_x.c_str());
 	BN_hex2bn(&key_A->P->y,public_A_y.c_str());
     gen_pub_from_pri_B(private_B,&public_B_x,&public_B_y,key_B,ecp2);
     send_publicB(sendAfd,public_B_x,public_B_y);
 
-    rev_ciphertext(listenfd,&ciphertext);
+    rev_ciphertext(listenAfd,&ciphertext);
     unsigncryption(ciphertext,&flag_unsigncrytion,&plaintext,key_B,key_A,\
                     ecp2,&time_unsigncrytion,&flag_replay_attack,\
                     &flag_tamper_attack,&timestamp);
+    cout << plaintext <<endl;
     send_timeFlag(sendInfd,time_unsigncrytion,\
                     flag_unsigncrytion,flag_replay_attack,flag_tamper_attack);
+
+    sm2_ec_key_free(key_B);
+	ec_param_free(ecp2);
+	sm2_ec_key_free(key_A);
+	close(sendAfd);
+	close(sendInfd);
+	close(listenInfd);
+	close(listenAfd);
     return;
 }
 
@@ -144,7 +180,9 @@ void send_timeFlag(int sendfd,double time_unsigncrytion,\
                     bool flag_unsigncrytion,bool flag_replay_attack,bool flag_tamper_attack)
 {
     string temp;
-    temp = to_string(time_unsigncrytion);
+    char buff[100];
+    sprintf(buff,"%lf",time_unsigncrytion);
+    temp = buff;
     temp.append(bool2string(flag_unsigncrytion));
     temp.append(bool2string(flag_replay_attack));
     temp.append(bool2string(flag_tamper_attack));
