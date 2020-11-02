@@ -108,7 +108,7 @@ void rev_privateB(int listenfd,string *private_B)
 void send_publicB(string public_B_x,string public_B_y)
 {
     send_msg(public_B_x,AIP,SENDAPORT);
-    send_msg(public_B_x,AIP,SENDAPORT);
+    send_msg(public_B_y,AIP,SENDAPORT);
     return;
 }
 void rev_publicA_x(int listenfd,string *public_A_x)

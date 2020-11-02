@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/lzd/Desktop/electron-crypto/SM2
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -77,6 +66,17 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named pcA
+# Target rules for targets named pcB
 
 # Build rule for target.
-pcA: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 pcA
-.PHONY : pcA
+pcB: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 pcB
+.PHONY : pcB
 
 # fast build rule for target.
-pcA/fast:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/build
-.PHONY : pcA/fast
+pcB/fast:
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/build
+.PHONY : pcB/fast
 
 ec_param.o: ec_param.cpp.o
 
@@ -129,7 +129,7 @@ ec_param.o: ec_param.cpp.o
 
 # target to build an object file
 ec_param.cpp.o:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/ec_param.cpp.o
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/ec_param.cpp.o
 .PHONY : ec_param.cpp.o
 
 ec_param.i: ec_param.cpp.i
@@ -138,7 +138,7 @@ ec_param.i: ec_param.cpp.i
 
 # target to preprocess a source file
 ec_param.cpp.i:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/ec_param.cpp.i
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/ec_param.cpp.i
 .PHONY : ec_param.cpp.i
 
 ec_param.s: ec_param.cpp.s
@@ -147,7 +147,7 @@ ec_param.s: ec_param.cpp.s
 
 # target to generate assembly for a file
 ec_param.cpp.s:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/ec_param.cpp.s
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/ec_param.cpp.s
 .PHONY : ec_param.cpp.s
 
 part5.o: part5.cpp.o
@@ -156,7 +156,7 @@ part5.o: part5.cpp.o
 
 # target to build an object file
 part5.cpp.o:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/part5.cpp.o
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/part5.cpp.o
 .PHONY : part5.cpp.o
 
 part5.i: part5.cpp.i
@@ -165,7 +165,7 @@ part5.i: part5.cpp.i
 
 # target to preprocess a source file
 part5.cpp.i:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/part5.cpp.i
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/part5.cpp.i
 .PHONY : part5.cpp.i
 
 part5.s: part5.cpp.s
@@ -174,35 +174,35 @@ part5.s: part5.cpp.s
 
 # target to generate assembly for a file
 part5.cpp.s:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/part5.cpp.s
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/part5.cpp.s
 .PHONY : part5.cpp.s
 
-pcA.o: pcA.cpp.o
+pcB.o: pcB.cpp.o
 
-.PHONY : pcA.o
+.PHONY : pcB.o
 
 # target to build an object file
-pcA.cpp.o:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/pcA.cpp.o
-.PHONY : pcA.cpp.o
+pcB.cpp.o:
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/pcB.cpp.o
+.PHONY : pcB.cpp.o
 
-pcA.i: pcA.cpp.i
+pcB.i: pcB.cpp.i
 
-.PHONY : pcA.i
+.PHONY : pcB.i
 
 # target to preprocess a source file
-pcA.cpp.i:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/pcA.cpp.i
-.PHONY : pcA.cpp.i
+pcB.cpp.i:
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/pcB.cpp.i
+.PHONY : pcB.cpp.i
 
-pcA.s: pcA.cpp.s
+pcB.s: pcB.cpp.s
 
-.PHONY : pcA.s
+.PHONY : pcB.s
 
 # target to generate assembly for a file
-pcA.cpp.s:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/pcA.cpp.s
-.PHONY : pcA.cpp.s
+pcB.cpp.s:
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/pcB.cpp.s
+.PHONY : pcB.cpp.s
 
 sm2.o: sm2.cpp.o
 
@@ -210,7 +210,7 @@ sm2.o: sm2.cpp.o
 
 # target to build an object file
 sm2.cpp.o:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm2.cpp.o
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm2.cpp.o
 .PHONY : sm2.cpp.o
 
 sm2.i: sm2.cpp.i
@@ -219,7 +219,7 @@ sm2.i: sm2.cpp.i
 
 # target to preprocess a source file
 sm2.cpp.i:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm2.cpp.i
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm2.cpp.i
 .PHONY : sm2.cpp.i
 
 sm2.s: sm2.cpp.s
@@ -228,7 +228,7 @@ sm2.s: sm2.cpp.s
 
 # target to generate assembly for a file
 sm2.cpp.s:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm2.cpp.s
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm2.cpp.s
 .PHONY : sm2.cpp.s
 
 sm2_ec_key.o: sm2_ec_key.cpp.o
@@ -237,7 +237,7 @@ sm2_ec_key.o: sm2_ec_key.cpp.o
 
 # target to build an object file
 sm2_ec_key.cpp.o:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm2_ec_key.cpp.o
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm2_ec_key.cpp.o
 .PHONY : sm2_ec_key.cpp.o
 
 sm2_ec_key.i: sm2_ec_key.cpp.i
@@ -246,7 +246,7 @@ sm2_ec_key.i: sm2_ec_key.cpp.i
 
 # target to preprocess a source file
 sm2_ec_key.cpp.i:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm2_ec_key.cpp.i
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm2_ec_key.cpp.i
 .PHONY : sm2_ec_key.cpp.i
 
 sm2_ec_key.s: sm2_ec_key.cpp.s
@@ -255,7 +255,7 @@ sm2_ec_key.s: sm2_ec_key.cpp.s
 
 # target to generate assembly for a file
 sm2_ec_key.cpp.s:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm2_ec_key.cpp.s
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm2_ec_key.cpp.s
 .PHONY : sm2_ec_key.cpp.s
 
 sm2_test_param.o: sm2_test_param.cpp.o
@@ -264,7 +264,7 @@ sm2_test_param.o: sm2_test_param.cpp.o
 
 # target to build an object file
 sm2_test_param.cpp.o:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm2_test_param.cpp.o
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm2_test_param.cpp.o
 .PHONY : sm2_test_param.cpp.o
 
 sm2_test_param.i: sm2_test_param.cpp.i
@@ -273,7 +273,7 @@ sm2_test_param.i: sm2_test_param.cpp.i
 
 # target to preprocess a source file
 sm2_test_param.cpp.i:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm2_test_param.cpp.i
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm2_test_param.cpp.i
 .PHONY : sm2_test_param.cpp.i
 
 sm2_test_param.s: sm2_test_param.cpp.s
@@ -282,7 +282,7 @@ sm2_test_param.s: sm2_test_param.cpp.s
 
 # target to generate assembly for a file
 sm2_test_param.cpp.s:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm2_test_param.cpp.s
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm2_test_param.cpp.s
 .PHONY : sm2_test_param.cpp.s
 
 sm3.o: sm3.cpp.o
@@ -291,7 +291,7 @@ sm3.o: sm3.cpp.o
 
 # target to build an object file
 sm3.cpp.o:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm3.cpp.o
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm3.cpp.o
 .PHONY : sm3.cpp.o
 
 sm3.i: sm3.cpp.i
@@ -300,7 +300,7 @@ sm3.i: sm3.cpp.i
 
 # target to preprocess a source file
 sm3.cpp.i:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm3.cpp.i
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm3.cpp.i
 .PHONY : sm3.cpp.i
 
 sm3.s: sm3.cpp.s
@@ -309,7 +309,7 @@ sm3.s: sm3.cpp.s
 
 # target to generate assembly for a file
 sm3.cpp.s:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/sm3.cpp.s
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/sm3.cpp.s
 .PHONY : sm3.cpp.s
 
 util.o: util.cpp.o
@@ -318,7 +318,7 @@ util.o: util.cpp.o
 
 # target to build an object file
 util.cpp.o:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/util.cpp.o
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/util.cpp.o
 .PHONY : util.cpp.o
 
 util.i: util.cpp.i
@@ -327,7 +327,7 @@ util.i: util.cpp.i
 
 # target to preprocess a source file
 util.cpp.i:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/util.cpp.i
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/util.cpp.i
 .PHONY : util.cpp.i
 
 util.s: util.cpp.s
@@ -336,7 +336,7 @@ util.s: util.cpp.s
 
 # target to generate assembly for a file
 util.cpp.s:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/util.cpp.s
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/util.cpp.s
 .PHONY : util.cpp.s
 
 xy_ecpoint.o: xy_ecpoint.cpp.o
@@ -345,7 +345,7 @@ xy_ecpoint.o: xy_ecpoint.cpp.o
 
 # target to build an object file
 xy_ecpoint.cpp.o:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/xy_ecpoint.cpp.o
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/xy_ecpoint.cpp.o
 .PHONY : xy_ecpoint.cpp.o
 
 xy_ecpoint.i: xy_ecpoint.cpp.i
@@ -354,7 +354,7 @@ xy_ecpoint.i: xy_ecpoint.cpp.i
 
 # target to preprocess a source file
 xy_ecpoint.cpp.i:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/xy_ecpoint.cpp.i
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/xy_ecpoint.cpp.i
 .PHONY : xy_ecpoint.cpp.i
 
 xy_ecpoint.s: xy_ecpoint.cpp.s
@@ -363,7 +363,7 @@ xy_ecpoint.s: xy_ecpoint.cpp.s
 
 # target to generate assembly for a file
 xy_ecpoint.cpp.s:
-	$(MAKE) -f CMakeFiles/pcA.dir/build.make CMakeFiles/pcA.dir/xy_ecpoint.cpp.s
+	$(MAKE) -f CMakeFiles/pcB.dir/build.make CMakeFiles/pcB.dir/xy_ecpoint.cpp.s
 .PHONY : xy_ecpoint.cpp.s
 
 # Help Target
@@ -372,18 +372,18 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... pcA"
+	@echo "... edit_cache"
+	@echo "... pcB"
 	@echo "... ec_param.o"
 	@echo "... ec_param.i"
 	@echo "... ec_param.s"
 	@echo "... part5.o"
 	@echo "... part5.i"
 	@echo "... part5.s"
-	@echo "... pcA.o"
-	@echo "... pcA.i"
-	@echo "... pcA.s"
+	@echo "... pcB.o"
+	@echo "... pcB.i"
+	@echo "... pcB.s"
 	@echo "... sm2.o"
 	@echo "... sm2.i"
 	@echo "... sm2.s"

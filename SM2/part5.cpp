@@ -40,7 +40,12 @@ int sm2_encrypt_copy(ec_param* ecp, message_st* message_data)
 	BN_bin2bn(message_data->public_key.y, ecp->point_byte_length, P_y);
 	BN_bin2bn(message_data->k, ecp->point_byte_length, k);
 
+	show_bignum(P_x,ecp->point_byte_length);
+	show_bignum(P_y,ecp->point_byte_length);
+	printf("\n");
 	xy_ecpoint_init_xy(P, P_x, P_y, ecp);
+	show_bignum(P->x,ecp->point_byte_length);
+	show_bignum(P->y,ecp->point_byte_length);
 	xy_ecpoint_mul_bignum(xy1, ecp->G, k, ecp);
 	xy_ecpoint_mul_bignum(xy2, P, k, ecp);
 
@@ -53,11 +58,15 @@ int sm2_encrypt_copy(ec_param* ecp, message_st* message_data)
 	pos1 = 0;
 	BUFFER_APPEND_BIGNUM(message_data->C_2, pos1, ecp->point_byte_length, xy2->x);
 	BUFFER_APPEND_BIGNUM(message_data->C_2, pos1, ecp->point_byte_length, xy2->y);
+	printf("\n");
+	show_bignum(xy2->x,ecp->point_byte_length);
+	show_bignum(xy2->y,ecp->point_byte_length);
 
 	t = KDF((BYTE*)message_data->C_2, message_data->klen_bit, ecp->point_byte_length + ecp->point_byte_length);
 	//加密过程
 	for (i = 0; i < message_data->message_byte_length; i++)
 	{
+		printf("%d ",t[i]);
 		message_data->C_2[i] = t[i] ^ message_data->message[i];
 	}
 	//lzd:长度限制一，因为C_2的最大长度值1024
@@ -121,6 +130,7 @@ int sm2_decrypt_copy(ec_param* ecp, message_st* message_data,bool* flag_replay_a
 
 	BN_bin2bn(&message_data->C_1[1], ecp->point_byte_length, xy1->x);
 	BN_bin2bn(&message_data->C_1[1 + ecp->point_byte_length], ecp->point_byte_length, xy1->y);
+	printf("%d\n",ecp->point_byte_length);
 
 	BN_bin2bn(message_data->private_key, ecp->point_byte_length, d);
 	xy_ecpoint_init_xy(xy1, xy1->x, xy1->y, ecp);
@@ -151,9 +161,10 @@ int sm2_decrypt_copy(ec_param* ecp, message_st* message_data,bool* flag_replay_a
 	}
 	t = KDF((BYTE*)KDF_buffer, message_data->klen_bit, ecp->point_byte_length + ecp->point_byte_length);
 	//解密过程
-
+	printf("%d\n",message_data->message_byte_length);
 	for (i = 0; i < message_data->message_byte_length; i++)
 	{
+		printf("%d ",message_data->C_2[i]);
 		message_data->decrypt[i] = t[i] ^ message_data->C_2[i];
 	}
 	OPENSSL_free(t);

@@ -252,7 +252,6 @@ void unsigncryption(string ciphertext, bool* flag_unsigncrytion, string* plainte
 	pos2 = pos2 + pos1;
 	
 	//sign初始化
-	printf("10\n");
 	sm2_hex2bin((BYTE*)sm2_param_digest_k[ecp2->type], sign.k, ecp2->point_byte_length);
 	//sm2_bn2bin(key_A->d, sign.private_key, ecp2->point_byte_length); //解签密过程不需要私钥
 	sm2_bn2bin(key_A->P->x, sign.public_key.x, ecp2->point_byte_length);//A的公钥

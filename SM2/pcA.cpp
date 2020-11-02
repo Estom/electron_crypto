@@ -76,15 +76,18 @@ void main_function()
 	cout<< plaintext <<endl;
 			
 	gen_pub_from_pri_A(private_A,&public_A_x,&public_A_y);
+	cout << public_A_x<< endl;
+	cout << public_A_y<< endl;
 	send_publicA(public_A_x,public_A_y);
 	rev_public_B_x(listenBfd,&public_B_x);
 	rev_public_B_y(listenBfd,&public_B_y);
+	cout << public_B_x <<endl;
+	cout <<public_B_y<<endl;
 
 	key_B = sm2_ec_key_new(ecp);
 	
 	BN_hex2bn(&key_B->P->x,public_B_x.c_str());
 	BN_hex2bn(&key_B->P->y,public_B_y.c_str());
-	show_bignum(key_B->P->x,ecp->point_byte_length);
 	signcryption(plaintext,&flag_signcryption,&ciphertext,&time_signcrytion);
 	
 	send_signtime(time_signcrytion);
