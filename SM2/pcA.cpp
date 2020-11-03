@@ -72,28 +72,31 @@ void main_function()
     
 	rev_privateA(listenInfd,&private_A);
 	cout<< private_A << endl;
-	rev_plaintext(listenInfd,&plaintext);
-	cout<< plaintext <<endl;
-			
+	rev_gen_public(listenInfd);
 	gen_pub_from_pri_A(private_A,&public_A_x,&public_A_y);
-	cout << public_A_x<< endl;
-	cout << public_A_y<< endl;
-	send_publicA(public_A_x,public_A_y);
+	cout <<"public_A" << public_A_x<< public_A_y << endl;
+	send_publicA_B(public_A_x,public_A_y);
+	send_publicA_IN(public_A_x,public_A_y);
+
 	rev_public_B_x(listenBfd,&public_B_x);
 	rev_public_B_y(listenBfd,&public_B_y);
-	cout << public_B_x <<endl;
-	cout <<public_B_y<<endl;
+	cout << "public_B" << public_B_x << public_B_y << endl;
+
+	rev_plaintext(listenInfd,&plaintext);
+	cout<< "plaintext" <<plaintext <<endl;
+	rev_start_sign(listenInfd);
 
 	key_B = sm2_ec_key_new(ecp);
 	
 	BN_hex2bn(&key_B->P->x,public_B_x.c_str());
 	BN_hex2bn(&key_B->P->y,public_B_y.c_str());
 	signcryption(plaintext,&flag_signcryption,&ciphertext,&time_signcrytion);
+	send_ciphertext_IN(ciphertext);
 	
 	send_signtime(time_signcrytion);
 	rev_signal(listenInfd);
-	send_ciphertext(ciphertext);
-	cout<<ciphertext << " "<< ciphertext.length() << endl;
+	send_ciphertext_B(ciphertext);
+	cout<<"ciphertext" << ciphertext << endl;
 
 	sm2_ec_key_free(key_B);
 	ec_param_free(ecp);
@@ -113,7 +116,7 @@ void rev_plaintext(int listenfd,string *plaintext)
 	rev_unit(listenfd,plaintext);
 	return;
 }
-void send_publicA(string public_A_x,string public_A_y)
+void send_publicA_B(string public_A_x,string public_A_y)
 {
 	send_msg(public_A_x,BIP,SENDBPORT);
 	send_msg(public_A_y,BIP,SENDBPORT);
@@ -135,7 +138,7 @@ void rev_signal(int listenfd)
 	rev_unit(listenfd,&temp);
 	return;
 }
-void send_ciphertext(string ciphertext)
+void send_ciphertext_B(string ciphertext)
 {
 	send_msg(ciphertext,BIP,SENDBPORT);
 	return;
@@ -146,5 +149,28 @@ void send_signtime(double time_signcryption)
 	sprintf(buff,"%lf",time_signcryption);
 	string temp = buff;
 	send_msg(temp,INIP,SENDINPORT);
+	return;
+}
+void send_ciphertext_IN(string ciphertext)
+{
+	send_msg(ciphertext,INIP,SENDINPORT);
+	return;
+}
+void rev_gen_public(int listenfd)
+{
+	string temp;
+	rev_unit(listenfd,&temp);
+	return;
+}
+void send_publicA_IN(string public_A_x,string public_A_y)
+{
+	send_msg(public_A_x,INIP,SENDINPORT);
+	send_msg(public_A_y,INIP,SENDINPORT);
+	return;
+}
+void rev_start_sign(int listenfd)
+{
+	string temp;
+	rev_unit(listenfd,&temp);
 	return;
 }

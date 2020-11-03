@@ -3,10 +3,10 @@ set(CMAKE_VERBOSE_MAKEFILE on )
 add_compile_options(-std=c99 -Wall)
 set(CMAKE_BUILD_TYPE Debug)
 
-project(pcB)
+project(pcA)
 
 aux_source_directory(. DIRSRCS)
 
-add_executable(pcB ${DIRSRCS})
+add_executable(pcA ${DIRSRCS})
 
-target_link_libraries(pcB ssl crypto)
+target_link_libraries(pcA ssl crypto)
