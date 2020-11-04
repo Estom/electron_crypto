@@ -21,9 +21,13 @@ using namespace std;
 
 //main interface function
 void main_function();
-void signcryption(int listenfd,string plaintext,bool *flag_signcrytion,string *ciphertext,string *time_signcrytion); //jie mian qianmi hanshu
-void unsigncryption(int listenfd, bool* flag_unsigncryption, string* plaintext,  \
+void initial_server();
+void signcryption(string plaintext,bool *flag_signcrytion,string *ciphertext,string *time_signcrytion); //jie mian qianmi hanshu
+void unsigncryption( bool* flag_unsigncryption, string* plaintext,  \
     string* time_unsigncryption,bool* flag_replay_attack, bool* flag_tamper_attack,string *timestamp);//解签密函数
+
+void gen_pub_from_pri_A(string private_A,string *public_A);
+void gen_pub_from_pri_B(string private_A,string *public_B);
 
 // initial
 void send_private_A(string private_A);
@@ -45,8 +49,9 @@ void re_B_timeFlag(int listenfd,string *time_unsigncrytion,\
                     bool *flag_tamper_attack,
                     string *time_stamp);
 
+
 //signal A to send cipher
-void send_signal_A();
+void send_signal_A(bool flag_replay,bool flag_tamper);
 
 bool string2bool(char flag);
 

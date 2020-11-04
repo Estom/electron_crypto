@@ -18,7 +18,7 @@ void main_function()
     bool flag_unsigncrytion;
     bool flag_replay_attack = false;
 	bool flag_tamper_attack = false;
-    string timestamp;
+    string timestamp="                   ";
 
 
     int listenAfd,listenInfd,connfd;

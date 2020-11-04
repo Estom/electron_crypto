@@ -10,12 +10,16 @@ void main_function()
     string private_A="128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263";
     string plaintext="hello";
     string ciphertext;
+	string attack_ciphertext;
     double time_signcrytion;
 	bool flag_signcryption;
     string public_A_x; //ru guo shi xiangtong de changdu ,ze jinxingxiugai
 	string public_A_y;
     string public_B_x;
 	string public_B_y;
+	string signal;
+	bool flag_do_tamper;
+	bool flag_do_replay;
 
 	int state=0; // state flag
 	char buff[MAXLINE];
@@ -94,8 +98,28 @@ void main_function()
 	send_ciphertext_IN(ciphertext);
 	
 	send_signtime(time_signcrytion);
-	rev_signal(listenInfd);
-	send_ciphertext_B(ciphertext);
+	rev_signal(listenInfd,&signal);
+	if (signal == "send_B")
+	{
+		send_ciphertext_B(ciphertext);
+	}
+	if (signal == "send_tamper")
+	{
+		flag_do_replay = true;
+		tamper_attack(ciphertext,&flag_do_replay,&attack_ciphertext);
+		send_ciphertext_IN(attack_ciphertext);
+		rev_signal(listenInfd,&signal);
+		send_ciphertext_B(attack_ciphertext);
+	}
+	cout << signal << endl;
+	if(signal == "send_replay")
+	{
+		flag_do_tamper = true;
+		replay_attack(ciphertext,&flag_do_tamper,&attack_ciphertext);
+		send_ciphertext_IN(attack_ciphertext);
+		rev_signal(listenInfd,&signal);
+		send_ciphertext_B(attack_ciphertext);
+	}
 	cout<<"ciphertext" << ciphertext << endl;
 
 	sm2_ec_key_free(key_B);
@@ -132,10 +156,9 @@ void rev_public_B_y(int listenfd,string *public_B_y)
 	rev_unit(listenfd,public_B_y);
 	return;
 }
-void rev_signal(int listenfd)
+void rev_signal(int listenfd,string *signal)
 {
-	string temp;
-	rev_unit(listenfd,&temp);
+	rev_unit(listenfd,signal);
 	return;
 }
 void send_ciphertext_B(string ciphertext)

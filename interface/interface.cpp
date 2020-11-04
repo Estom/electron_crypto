@@ -1,5 +1,6 @@
 //interface main function
 #include"interface.h"
+int listenAfd,listenBfd;
 int main()
 {
     main_function();
@@ -11,15 +12,17 @@ void main_function()
     string private_A="128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263";
     string private_B="1649AB77A00637BD5E2EFE283FBF353534AA7F7CB89463F208DDBC2920BB0DA0";
     string plaintext="hello";
+	bool flag_replay = false;
+	bool flag_tamper = false;
 
     
     //receive
-	string public_A_x;
-	string public_A_y;
-	string public_B_x;
-	string public_B_y;
+	string public_A="";
+	string public_B="";
 	string ciphertext_A;
 	string ciphertext_B;
+	string replay_ciphertext="";
+	string tamper_ciphertext="";
 	string plaintext_B;
     string time_signcrytion;
     string time_unsigncrytion;
@@ -30,8 +33,49 @@ void main_function()
 	string timestamp;
     int state = 0;
 
-    //int sendAfd,sendBfd,listenfd,connfd;
-	int listenAfd,listenBfd;
+	initial_server();
+    send_private_A(private_A);
+    send_private_B(private_B);
+	gen_pub_from_pri_A(private_A,&public_A);
+	gen_pub_from_pri_B(private_B,&public_B);
+
+	signcryption(plaintext,&flag_signcrytion,&ciphertext_A,&time_signcrytion);
+
+	send_signal_A(flag_replay,flag_tamper);
+	if (flag_replay==true)
+	{
+		re_A_ciphertext(listenAfd,&replay_ciphertext);
+		send_signal_A(flag_replay,flag_tamper);
+	}
+	if (flag_tamper==true)
+	{
+		re_A_ciphertext(listenAfd,&tamper_ciphertext);
+		send_signal_A(flag_replay,flag_tamper);
+	}
+	re_B_ciphertext(listenBfd,&ciphertext_B);
+	
+	unsigncryption(&flag_unsigncrytion,&plaintext_B,\
+					&time_unsigncrytion,&flag_replay_attack,\
+					&flag_tamper_attack,&timestamp);
+	
+	cout<< "public_A" << public_A << endl;
+	cout << "public_B" << public_B << endl;
+	cout << "tamper_ciphertext" << tamper_ciphertext << endl;
+	cout << "replay_ciphertext" << replay_ciphertext << endl;
+	cout <<"time_signcrytion"<< time_signcrytion << endl;
+	cout << "flag_unsigncrytion" << flag_unsigncrytion << endl;
+	cout << "flag_replay_attack" << flag_replay_attack << endl;
+	cout <<"flag_tamper_attack"<< flag_tamper_attack << endl;
+	cout <<"time_unsigncrytion"<< time_unsigncrytion << endl;
+	cout << "time_stamp" << timestamp << endl;
+
+	close(listenBfd);
+	close(listenAfd);
+    return;
+}
+void initial_server()
+{
+	//int sendAfd,sendBfd,listenfd,connfd;
     struct sockaddr_in listenaddr;
 
     //initial listen port
@@ -77,42 +121,16 @@ void main_function()
 		printf("listen socket error\n");
 		return;
 	}
-
-    send_private_A(private_A);
-    send_private_B(private_B);
-	send_gen_public_A();
-	re_A_public(listenAfd,&public_A_x,&public_A_y);
-	send_gen_public_B();
-	re_B_public(listenBfd,&public_B_x,&public_B_y);
-
-	signcryption(listenAfd,plaintext,&flag_signcrytion,&ciphertext_A,&time_signcrytion);
-
-	send_signal_A();
-	re_B_ciphertext(listenBfd,&ciphertext_B);
-	
-	unsigncryption(listenBfd,&flag_unsigncrytion,&plaintext_B,\
-					&time_unsigncrytion,&flag_replay_attack,\
-					&flag_tamper_attack,&timestamp);
-
-	cout <<"time_signcrytion"<< time_signcrytion << endl;
-	cout << "flag_unsigncrytion" << flag_unsigncrytion << endl;
-	cout << "flag_replay_attack" << flag_replay_attack << endl;
-	cout <<"flag_tamper_attack"<< flag_tamper_attack << endl;
-	cout <<"time_unsigncrytion"<< time_unsigncrytion << endl;
-	cout << "time_stamp" << timestamp << endl;
-
-	close(listenBfd);
-	close(listenAfd);
-    return;
+	return;
 }
 
-void signcryption(int listenfd,string plaintext,bool *flag_signcrytion,string *ciphertext,string *time_signcrytion)
+void signcryption(string plaintext,bool *flag_signcrytion,string *ciphertext,string *time_signcrytion)
 {
 	*flag_signcrytion = false;
 	send_plaintext(plaintext);
 	send_start_sign();
-	re_A_ciphertext(listenfd,ciphertext);
-    re_A_signtime(listenfd,time_signcrytion);
+	re_A_ciphertext(listenAfd,ciphertext);
+    re_A_signtime(listenAfd,time_signcrytion);
 	if ((*time_signcrytion).length()!=0)
 	{
 		*flag_signcrytion = true;
@@ -120,16 +138,34 @@ void signcryption(int listenfd,string plaintext,bool *flag_signcrytion,string *c
 	return;
 }
 
-void unsigncryption(int listenfd, bool* flag_unsigncryption, string* plaintext,  \
+void unsigncryption( bool* flag_unsigncryption, string* plaintext,  \
     string* time_unsigncryption,bool* flag_replay_attack, bool* flag_tamper_attack,string *timestamp)
 {
 	send_start_unsign();
-	re_B_plaintext(listenfd,plaintext);
-	re_B_timeFlag(listenfd,time_unsigncryption,\
+	re_B_plaintext(listenBfd,plaintext);
+	re_B_timeFlag(listenBfd,time_unsigncryption,\
 				flag_unsigncryption,\
 				flag_replay_attack,\
 				flag_tamper_attack,\
 				timestamp);
+	return;
+}
+void gen_pub_from_pri_A(string private_A,string *public_A)
+{
+	string public_A_x,public_A_y;
+	send_gen_public_A();
+	re_A_public(listenAfd,&public_A_x,&public_A_y);
+	(*public_A).append(public_A_x);
+	(*public_A).append(public_A_y);
+	return;
+}
+void gen_pub_from_pri_B(string private_A,string *public_B)
+{
+	string public_B_x,public_B_y;
+	send_gen_public_B();
+	re_B_public(listenBfd,&public_B_x,&public_B_y);
+	(*public_B).append(public_B_x);
+	(*public_B).append(public_B_y);
 	return;
 }
 
@@ -170,9 +206,13 @@ void re_B_timeFlag(int listenfd,string *time_unsigncrytion,\
 	*time_stamp = temp.substr(len-19,19);
     return;
 }
-void send_signal_A()
-{
-    string signal = "send";
+void send_signal_A(bool flag_replay,bool flag_tamper)
+{	
+	string signal = "send_B";
+	if (flag_replay)
+		signal = "send_replay";
+	if (flag_tamper)
+		signal = "send_tamper";
     send_msg(signal,AIP,SENDAPORT);
     return;
 }

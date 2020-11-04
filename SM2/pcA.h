@@ -15,7 +15,7 @@ void rev_plaintext(int listenfd,string *plaintext);
 void send_publicA_B(string public_A_x,string public_A_y);
 void rev_public_B_x(int listenfd,string *public_B_x);
 void rev_public_B_y(int listenfd,string *public_B_y);
-void rev_signal(int listenfd);
+void rev_signal(int listenfd,string *signal);
 void send_ciphertext_B(string ciphertext);
 void send_signtime(double time_signcryption);
 

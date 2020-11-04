@@ -413,7 +413,7 @@ void replay_attack(string intercepted_ciphertext, bool* flag_do_replay, string* 
 	if (intercepted_ciphertext == "")
 		*flag_do_replay = false;
 	if (*flag_do_replay) {
-		while (clock() - now < DELAY_TIME);
+		sleep(DELAY_TIME/1000);
 	}
 	return;
 }
