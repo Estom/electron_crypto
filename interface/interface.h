@@ -19,7 +19,6 @@ using namespace std;
 #define AIP "127.0.0.1"
 #define BIP "127.0.0.1"
 
-
 //main interface function
 void main_function();
 void initial_server();
@@ -28,23 +27,23 @@ void unsigncryption( bool* flag_unsigncryption, string* plaintext,  \
     string* time_unsigncryption,bool* flag_replay_attack, bool* flag_tamper_attack,string *timestamp);//解签密函数
 
 void gen_pub_from_pri_A(string private_A,string *public_A);
-void gen_pub_from_pri_B(string private_A,string *public_B);
-void intercept_cipher(string ciphertext, bool *flag_intercept, string *intercepted_ciphertext);
-void tamper_attack(string intercepted_ciphertext, bool *flag_do_tamper, string *ciphertext_new);
-void replay_attack(string intercepted_ciphertext, bool *flag_do_replay, string *ciphertext);
-void receive_B(string *ciphertext_B);
+void gen_pub_from_pri_B(string private_B,string *public_B);
 
+//密文篡改攻击函数,随机数
+void tamper_attack(string intercepted_ciphertext, bool* flag_do_tamper,string *ciphertext);
+//消息重放攻击函数，延迟发送
+void replay_attack(string intercepted_ciphertext, bool* flag_do_replay,string *ciphertext);
 
 // initial
-void send_private_A(string private_A);//秘钥---
+void send_private_A(string private_A);
 void send_private_B(string private_B);
-void send_plaintext(string plaintext);//发送明文
-void send_gen_public_A();//生成公钥
+void send_plaintext(string plaintext);
+void send_gen_public_A();
 void send_gen_public_B();
 void re_A_public(int listenfd,string *public_A_x,string *public_A_y);
 void re_B_public(int listenfd,string *public_B_x,string *public_B_y);
-void send_start_sign();//开始签密
-void send_start_unsign();//开始解密
+void send_start_sign();
+void send_start_unsign();
 void re_A_signtime(int listenfd,string *time_signcrytion);
 void re_A_ciphertext(int listenfd,string *ciphertext);
 void re_B_ciphertext(int listenfd,string *ciphertext);
@@ -57,7 +56,7 @@ void re_B_timeFlag(int listenfd,string *time_unsigncrytion,\
 
 
 //signal A to send cipher
-void send_signal_A(bool flag_replay,bool flag_tamper);//a->b
+void send_signal_A(bool flag_replay,bool flag_tamper);
 
 bool string2bool(char flag);
 

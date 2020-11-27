@@ -1,4 +1,5 @@
 #include"part5.h"
+#include<pthread.h>
 
 #define SENDAPORT 6669
 #define LISTENAPORT 6668
@@ -26,3 +27,7 @@ void send_plaintext(string plaintext);
 
 
 string bool2string(bool flag);
+
+//
+void *thread_IN(void *ptr);//interface
+void *thread_A(void *ptr);//A

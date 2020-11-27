@@ -9,6 +9,7 @@
 
 //main function
 void main_function();
+void intial_listener();
 
 void rev_privateA(int listenfd,string *private_A);
 void rev_plaintext(int listenfd,string *plaintext);
@@ -23,3 +24,6 @@ void send_ciphertext_IN(string ciphertext);
 void rev_gen_public(int listenfd);
 void send_publicA_IN(string public_A_x,string public_A_y);
 void rev_start_sign(int listenfd);
+
+void *thread_IN(void *ptr);
+void *thread_B(void *ptr);
