@@ -33,6 +33,9 @@ void gen_pub_from_pri_B(string private_B,string *public_B);
 void tamper_attack(string intercepted_ciphertext, bool* flag_do_tamper,string *ciphertext);
 //消息重放攻击函数，延迟发送
 void replay_attack(string intercepted_ciphertext, bool* flag_do_replay,string *ciphertext);
+void intercept_cipher(string ciphertext, bool *flag_intercept, string *intercepted_ciphertext);
+void receive_B(string *ciphertext_B);
+
 
 // initial
 void send_private_A(string private_A);

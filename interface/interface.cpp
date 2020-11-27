@@ -12,8 +12,8 @@ void main_function()
     string private_A="128B2FA8BD433C6C068C8D803DFF79792A519A55171B1B650C23661D15897263";
     string private_B="1649AB77A00637BD5E2EFE283FBF353534AA7F7CB89463F208DDBC2920BB0DA0";
     string plaintext="hello";
-	bool flag_replay = false;
-	bool flag_tamper = true;
+	bool flag_replay = true;
+	bool flag_tamper = false;
 
     
     //receive
@@ -40,7 +40,6 @@ void main_function()
 
 	signcryption(plaintext,&flag_signcrytion,&ciphertext_A,&time_signcrytion);
 
-	send_signal_A(flag_replay,flag_tamper);
 	tamper_attack("",&flag_tamper,&tamper_ciphertext);
 	replay_attack("",&flag_replay,&replay_ciphertext);
 
@@ -163,7 +162,14 @@ void gen_pub_from_pri_B(string private_B,string *public_B)
 	(*public_B).append(public_B_y);
 	return;
 }
-
+void intercept_cipher(string ciphertext, bool *flag_intercept, string *intercepted_ciphertext){
+	*flag_intercept = true;
+    *intercepted_ciphertext = ciphertext;
+    return;
+}
+void receive_B(string *ciphertext_B){
+	re_B_ciphertext(listenBfd,ciphertext_B);
+}
 void send_private_A(string private_A)
 {
     send_msg(private_A,AIP,SENDAPORT);
@@ -194,6 +200,7 @@ void re_B_timeFlag(int listenfd,string *time_unsigncrytion,\
 	int len;
     rev_unit(listenfd,&temp);
 	len = temp.length();
+	// cout<<"changdu:"<<len<<endl;
 	*flag_unsigncrytion = string2bool(temp[len-22]);
 	*flag_replay_attack = string2bool(temp[len-21]);
 	*flag_tamper_attack = string2bool(temp[len-20]);
@@ -374,6 +381,7 @@ void tamper_attack(string intercepted_ciphertext, bool* flag_do_tamper,string *c
 {
 	if (*flag_do_tamper==true)
 	{
+		send_signal_A(false,true);
 		re_A_ciphertext(listenAfd,ciphertext);
 		send_signal_A(false,flag_do_tamper);
 	}
@@ -383,7 +391,9 @@ void replay_attack(string intercepted_ciphertext, bool* flag_do_replay,string *c
 {
 	if (*flag_do_replay==true)
 	{
+		send_signal_A(true,false);
 		re_A_ciphertext(listenAfd,ciphertext);
+		// cout<<*ciphertext<<endl;
 		send_signal_A(flag_do_replay,false);
 	}
 }

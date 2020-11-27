@@ -246,12 +246,12 @@ napi_value unsigncryption_method(napi_env env, const napi_callback_info info)
     assert(status == napi_ok);
 
     //调用解签密函数
-    string plaintext;          //明文
-    string time_unsigncrytion; //解签密所用的时间（毫秒）
-    bool flag_unsigncrytion;      //解签密是否成功
-    bool flag_replay_attack;      //是否遭受了消息重放攻击
-    bool flag_tamper_attack;      //消息是否被篡改
-    string timestamp;      //重放攻击中密文的时间戳
+    string plaintext="";          //明文
+    string time_unsigncrytion=""; //解签密所用的时间（毫秒）
+    bool flag_unsigncrytion=false;      //解签密是否成功
+    bool flag_replay_attack=false;      //是否遭受了消息重放攻击
+    bool flag_tamper_attack=false;      //消息是否被篡改
+    string timestamp="";      //重放攻击中密文的时间戳
     flag_unsigncrytion = 1;
     unsigncryption(&flag_unsigncrytion, &plaintext,
                    &time_unsigncrytion, &flag_replay_attack, &flag_tamper_attack, &timestamp);

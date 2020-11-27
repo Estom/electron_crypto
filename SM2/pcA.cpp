@@ -199,8 +199,7 @@ void *thread_IN(void *ptr)
 				send_signtime(time_signcrytion);
 				break;
 			case '3': // send B
-				ciphertext = "1" + ciphertext;
-				send_ciphertext_B(ciphertext);
+				send_ciphertext_B("1"+ciphertext);
 				break;
 			case '4': // send tamper
 				flag_do_replay = true;

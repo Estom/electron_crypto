@@ -3,7 +3,7 @@
 string private_B;
 string ciphertext;
 string plaintext;
-double time_unsigncrytion;
+double time_unsigncrytion=0.0;
 string public_A_x;
 string public_A_y;
 string public_B_x;
@@ -197,6 +197,7 @@ void *thread_IN(void *ptr)
                 send_plaintext(plaintext);
                 send_timeFlag(time_unsigncrytion,\
                                 flag_unsigncrytion,flag_replay_attack,flag_tamper_attack,timestamp);
+                timestamp="                   ";
                 break;
             case '3':
                 send_msg("3",AIP,SENDAPORT);

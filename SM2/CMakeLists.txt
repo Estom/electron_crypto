@@ -9,4 +9,4 @@ aux_source_directory(. DIRSRCS)
 
 add_executable(pcB ${DIRSRCS})
 
-target_link_libraries(pcB ssl crypto)
+target_link_libraries(pcB ssl crypto pthread)

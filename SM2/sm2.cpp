@@ -463,6 +463,7 @@ void send_msg(string msg,char* ip_add,int port)
 		printf("connect error\n");
 		return;
 	}
+	cout<< msg.length()<< endl;
 
 	if (send(sockfd,msg.c_str(),msg.length(),0)<0)
 	{
