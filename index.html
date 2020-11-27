@@ -24,24 +24,135 @@
     style="background-repeat: no-repeat;background-size:cover;background-attachment: fixed;">
     <!-- ============================================================== -->
     <div class="dashboard-main-wrapper ">
-            <h1 class="text-white text-center display-4">基于SM2的签密密码系统</h1>
+        <h1 class="text-white text-center display-4">基于SM2的签密密码系统</h1>
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="influence-finder">
             <div class="container-fluid dashboard-content ">
                 <div class="card-deck m-3 p-3">
                     <div class="card" style="opacity: 1;">
-                        <div class="card-body">
+                        <div class="card-header">
                             <div class="row">
                                 <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-10">
                                     <div class="progress m-t-20">
-                                        <div id="server_bar" class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div id="server_bar" class="progress-bar progress-bar-striped bg-success"
+                                            role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                                            aria-valuemax="100"></div>
                                     </div>
                                 </div>
                                 <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
                                     <button class="btn btn-space btn-dark" id="init_server">建立通信</button>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class=""
+                                        style="background:url('./assets/background/map.png');width:100%;height:350px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                                            style="width:100%;height:350px;">
+                                            <!-- <circle cx="100" cy="50" r="40" stroke="black"
+                                            stroke-width="2" fill="red" /> -->
+                                            <image xlink:href="./assets/background/dimianzhan.png" x="10%" y="10%"
+                                                height="100px" width="100px" />
+                                            <text x="10%" y="40%" style="fill:red;">
+                                                控制台
+                                            </text>
+                                            <image xlink:href="./assets/background/wurenji.png" x="80%" y="10%"
+                                                height="100px" width="100px" />
+                                            <text x="80%" y="40%" style="fill:red;">
+                                                无人机B
+                                            </text>
+                                            <image xlink:href="./assets/background/wurenji.png" x="10%" y="70%"
+                                                height="100px" width="100px" />
+                                            <text x="10%" y="99%" style="fill:red;">
+                                                无人机A
+                                            </text>
+                                            <image xlink:href="./assets/background/gongjizhe.png" x="80%" y="70%"
+                                                height="100px" width="100px" />
+                                            <text x="80%" y="99%" style="fill:red;">
+                                                攻击者
+                                            </text>
+                                            <!-- interface - pcb -->
+                                            <g id="ib">
+                                                <line x1="20%" y1="20%" x2="75%" y2="20%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" id="ib1" />
+                                                <line x1="73%" y1="18%" x2="75%" y2="20%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" id="ib2" />
+                                            </g>
+
+                                            <g id="bi">
+                                                <line x1="20%" y1="30%" x2="75%" y2="30%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                                <line x1="20%" y1="30%" x2="22%" y2="32%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                            </g>
+                                            <!-- interface - pca -->
+                                            <g id="ia">
+                                                <line x1="12%" y1="45%" x2="12%" y2="70%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                                <line x1="11%" y1="68%" x2="12%" y2="70%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                            </g>
+                                            <g id="ai">
+                                                <line x1="17%" y1="45%" x2="17%" y2="70%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                                <line x1="17%" y1="45%" x2="18%" y2="47%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                            </g>
+
+                                            <!-- interface - attacker -->
+                                            <g id="it">
+                                                <line x1="21%" y1="35%" x2="79%" y2="75%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                                <line x1="77%" y1="71%" x2="79%" y2="75%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                            </g>
+                                            <g id="ti">
+                                                <line x1="20%" y1="40%" x2="78%" y2="80%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                                <line x1="20%" y1="40%" x2="22%" y2="44%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                            </g>
+                                            <!-- pca - pcb -->
+                                            <g id="ab">
+                                                <line x1="20%" y1="75%" x2="78%" y2="35%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                                <line x1="76%" y1="39%" x2="78%" y2="35%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                            </g>
+                                            <g id="ba">
+                                                <line x1="21%" y1="80%" x2="79%" y2="40%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                                <line x1="21%" y1="80%" x2="23%" y2="81%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                            </g>
+                                            <!-- pca-attacker -->
+                                            <g id="at">
+                                                <line x1="20%" y1="90%" x2="75%" y2="90%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                                <line x1="73%" y1="88%" x2="75%" y2="90%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                            </g>
+                                            <!-- attacker-pcb -->
+                                            <g id="tb">
+                                                <line x1="85%" y1="70%" x2="85%" y2="45%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                                <line x1="86%" y1="47%" x2="85%" y2="45%"
+                                                    style="stroke:rgb(99,99,99);stroke-width:3" />
+                                            </g>
+
+
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <img src="./assets/background/controlor.png" alt=""
+                                        style="width:100%;height:350px;">
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -243,49 +354,61 @@
                     <!-- ============================================================== -->
                     <!-- end search bar  -->
                 </div>
-                <div class="card-deck m-3 p-3">
+                <div class="row m-3 p-3">
                     <!-- ============================================================== -->
                     <!-- search bar  -->
                     <!-- ============================================================== -->
-                    <div class="card">
-                        <div class="card-header bg-dark text-center p-3 ">
-                            <h4 class="mb-0 text-white">篡改攻击者</h4>
-                        </div>
-                        <div class="card-body p-1">
-                            <form class="m-3">
-                                <div class="form-group row">
-                                    <label for="intercept_message1" class="col-2 col-form-label">截获密文</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="c_sign_message" readonly>
+                    <div class="col-3"></div>
+                    <div class="col-6">
+
+                        <div class="card">
+                            <div class="card-header bg-dark text-center p-3 ">
+                                <h4 class="mb-0 text-white">篡改攻击者</h4>
+                            </div>
+                            <div class="card-body p-1">
+                                <form class="m-3">
+                                    <div class="form-group row">
+                                        <label for="intercept_message1" class="col-2 col-form-label">截获密文</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="c_sign_message" readonly>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="tamper_message" class="col-2 col-form-label">篡改密文</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="c_tamper_message" readonly>
+                                    <div class="form-group row">
+                                        <label for="tamper_message" class="col-2 col-form-label">篡改密文</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="c_tamper_message" readonly>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputPassword3" class="col-2 col-form-label">发送者</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control-plaintext" readonly value="用户A">
+
+                                    <div class="form-group row">
+                                        <label for="replay_message" class="col-2 col-form-label">重放信息</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="d_replay_message" readonly>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputPassword3" class="col-2 col-form-label">接收者</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control-plaintext" readonly value="用户B">
+                                    <div class="form-group row">
+                                        <label for="inputPassword3" class="col-2 col-form-label">发送者</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control-plaintext" readonly value="用户A">
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="card-footer d-flex text-muted justify-content-around">
-                            <button class="btn btn-space btn-dark mb-2" id="c_intercept">截获</button>
-                            <button class="btn btn-space btn-dark mb-2" id="c_tamper">篡改</button>
-                            <button class="btn btn-space btn-dark mb-2" id="c_send">发送</button>
+                                    <div class="form-group row">
+                                        <label for="inputPassword3" class="col-2 col-form-label">接收者</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control-plaintext" readonly value="用户B">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer d-flex text-muted justify-content-around">
+                                <button class="btn btn-space btn-dark mb-2" id="c_intercept">截获</button>
+                                <button class="btn btn-space btn-dark mb-2" id="c_tamper">篡改</button>
+                                <button class="btn btn-space btn-dark mb-2" id="c_replay">重放</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="card">
+
+                    <!-- <div class="card">
                         <div class="card-header bg-dark text-center p-3 ">
                             <h4 class="mb-0 text-white">重放攻击者</h4>
                         </div>
@@ -321,7 +444,7 @@
                             <button class="btn btn-space btn-dark mb-2" id="d_intercept">截获</button>
                             <button class="btn btn-space btn-dark mb-2" id="d_send">发送</button>
                         </div>
-                    </div>
+                    </div> -->
                     <!-- ============================================================== -->
                     <!-- end search bar  -->
                 </div>
