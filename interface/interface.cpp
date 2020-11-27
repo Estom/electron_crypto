@@ -1,6 +1,7 @@
 //interface main function
 #include"interface.h"
 int listenAfd,listenBfd;
+
 int main()
 {
     main_function();
@@ -34,8 +35,6 @@ void main_function()
     int state = 0;
 
 	initial_server();
-    send_private_A(private_A);
-    send_private_B(private_B);
 	gen_pub_from_pri_A(private_A,&public_A);
 	gen_pub_from_pri_B(private_B,&public_B);
 
@@ -52,7 +51,7 @@ void main_function()
 		re_A_ciphertext(listenAfd,&tamper_ciphertext);
 		send_signal_A(flag_replay,flag_tamper);
 	}
-	re_B_ciphertext(listenBfd,&ciphertext_B);
+	receive_B(&ciphertext_B);
 	
 	unsigncryption(&flag_unsigncrytion,&plaintext_B,\
 					&time_unsigncrytion,&flag_replay_attack,\
@@ -142,7 +141,9 @@ void unsigncryption( bool* flag_unsigncryption, string* plaintext,  \
     string* time_unsigncryption,bool* flag_replay_attack, bool* flag_tamper_attack,string *timestamp)
 {
 	send_start_unsign();
+
 	re_B_plaintext(listenBfd,plaintext);
+
 	re_B_timeFlag(listenBfd,time_unsigncryption,\
 				flag_unsigncryption,\
 				flag_replay_attack,\
@@ -152,6 +153,8 @@ void unsigncryption( bool* flag_unsigncryption, string* plaintext,  \
 }
 void gen_pub_from_pri_A(string private_A,string *public_A)
 {
+	send_private_A(private_A);
+
 	string public_A_x,public_A_y;
 	send_gen_public_A();
 	re_A_public(listenAfd,&public_A_x,&public_A_y);
@@ -159,14 +162,47 @@ void gen_pub_from_pri_A(string private_A,string *public_A)
 	(*public_A).append(public_A_y);
 	return;
 }
-void gen_pub_from_pri_B(string private_A,string *public_B)
+void gen_pub_from_pri_B(string private_B,string *public_B)
 {
+	send_private_B(private_B);
+
 	string public_B_x,public_B_y;
 	send_gen_public_B();
 	re_B_public(listenBfd,&public_B_x,&public_B_y);
 	(*public_B).append(public_B_x);
 	(*public_B).append(public_B_y);
 	return;
+}
+void intercept_cipher(string ciphertext, bool *flag_intercept, string *intercepted_ciphertext){
+	*flag_intercept = true;
+    *intercepted_ciphertext = ciphertext;
+    return;
+}
+void tamper_attack(string intercepted_ciphertext, bool *flag_do_tamper, string *ciphertext_new){
+	bool flag_tamper=true;
+	bool flag_replay=false;
+	if (flag_tamper==true)
+	{
+		re_A_ciphertext(listenAfd,ciphertext_new);
+		send_signal_A(flag_replay,flag_tamper);
+	}
+	re_B_ciphertext(listenBfd,ciphertext_new);
+	return;
+}
+void replay_attack(string intercepted_ciphertext, bool *flag_do_replay, string *ciphertext){
+	bool flag_tamper=false;
+	bool flag_replay=true;
+	send_signal_A(flag_replay,flag_tamper);
+	if (flag_replay==true)
+	{
+		re_A_ciphertext(listenAfd,ciphertext);
+		send_signal_A(flag_replay,flag_tamper);
+	}
+	re_B_ciphertext(listenBfd,ciphertext);
+	return;
+}
+void receive_B(string *ciphertext_B){
+	re_B_ciphertext(listenBfd,ciphertext_B);
 }
 
 void send_private_A(string private_A)

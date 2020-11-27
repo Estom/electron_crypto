@@ -26,13 +26,14 @@
       "name": "sm2.node",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/Debug/sm2.node",
+      "program": "${workspaceFolder}/build/Release/sm2.node",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
+      
       // "preLaunchTask":"npm: addon_test",
       "setupCommands": [
           {

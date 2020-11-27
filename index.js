@@ -23,6 +23,12 @@ sm2 = require('./build/Release/sm2');
 * 4. 打包发布。
 */
 $(document).ready(function(){
+    $('#init_server').click(function(){
+        result = sm2.init_server()
+        $("#server_bar").attr("style","width:100%")
+        // $('#modal').modal('show');
+    })
+
     $('#a_gen_key').click(function(){
         // $('#modal').modal('show');
         private_key = $('#a_private_key').val();
@@ -56,6 +62,7 @@ $(document).ready(function(){
 
     $('#a_send').click(function(){
         message.send_message = message.a_sign_message;
+        sm2.send_signal_A()
     })
 
     $('#b_gen_key').click(function(){
@@ -66,6 +73,8 @@ $(document).ready(function(){
 
     $('#b_receive').click(function(){
         message.receive_message=message.send_message;
+        var receive_result = sm2.receive_signal_B();
+        message.receive_message=receive_result.ciphertext_B;
         $('#b_sign_message').val(message.receive_message);
     })
 
@@ -167,7 +176,10 @@ $(document).ready(function(){
 
 })
 
-
+// 可以在在下边制作一组动画函数。
+// 使用HTML规范位置
+// 使用CSS3画图
+// 使用jQuery实现动画效果函数，然后在执行通信过程中，对通信过程进行动态展示
 
 
 // document.getElementById("a_gen_key").onclick=function(){
