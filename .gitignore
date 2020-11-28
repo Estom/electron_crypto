@@ -1,4 +1,4 @@
 node_modules
-build
+/build
 app
 SM2/Makefile
